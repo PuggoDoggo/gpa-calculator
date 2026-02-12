@@ -1,0 +1,321 @@
+---
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+import AdUnit from '../components/AdUnit.astro';
+import { schools, sgUniversities, sgPolytechnics, myUniversities } from '../data/schools';
+
+interface Props {
+  title: string;
+  description: string;
+  schema?: object;
+  faqs?: Array<{ question: string; answer: string }>;
+  currentSchool?: string;
+}
+
+const { title, description, schema, faqs, currentSchool } = Astro.props;
+const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-9622161915145913';
+
+const navLinks = [
+  { href: '/', label: 'Cumulative GPA', icon: 'calc' },
+  { href: '/gpa-to-percentage', label: 'GPA to %', icon: 'convert' },
+  { href: '/percentage-to-gpa', label: '% to GPA', icon: 'convert' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+
+    <SEO
+      title={title}
+      description={description}
+      schema={schema}
+      faqs={faqs}
+    />
+
+    {adsenseClient && (
+      <script
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+        crossorigin="anonymous"
+      ></script>
+    )}
+
+    <style is:global>
+      * {
+        font-family: 'Space Grotesk', system-ui, sans-serif;
+      }
+      h1, h2, h3 {
+        font-family: 'Space Grotesk', system-ui, sans-serif;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen bg-[#FFFBF5] text-[#1C1917]">
+    <!-- Mobile Header -->
+    <header class="lg:hidden sticky top-0 z-50 bg-[#FFFBF5]/95 backdrop-blur-md border-b border-stone-200">
+      <div class="flex items-center justify-between px-4 h-14">
+        <a href="/" class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-[#10B981] flex items-center justify-center shadow-[3px_3px_0px_#1C1917]">
+            <span class="text-white font-bold text-sm">G</span>
+          </div>
+          <span class="font-bold text-lg">GPACalc</span>
+        </a>
+        <button id="mobile-menu-btn" class="p-2 rounded-lg text-stone-600 hover:bg-stone-100" aria-label="Open menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+      <!-- Mobile Menu -->
+      <nav id="mobile-menu" class="hidden border-t border-stone-200 bg-white">
+        <div class="p-4 space-y-1">
+          {navLinks.map(link => (
+            <a
+              href={link.href}
+              class:list={[
+                'block px-3 py-2 rounded-lg text-sm font-semibold',
+                Astro.url.pathname === link.href
+                  ? 'bg-[#10B981]/10 text-[#10B981]'
+                  : 'text-stone-600 hover:bg-stone-50'
+              ]}
+            >
+              {link.label}
+            </a>
+          ))}
+          <div class="pt-3 mt-3 border-t border-stone-200">
+            <p class="px-3 py-1 text-xs font-bold text-stone-400 uppercase tracking-wider">Schools</p>
+            {schools.slice(0, 8).map(school => (
+              <a
+                href={`/schools/${school.id}`}
+                class:list={[
+                  'block px-3 py-2 rounded-lg text-sm',
+                  currentSchool === school.id
+                    ? 'bg-[#10B981]/10 text-[#10B981] font-semibold'
+                    : 'text-stone-600'
+                ]}
+              >
+                {school.shortName}
+              </a>
+            ))}
+            <a href="/schools" class="block px-3 py-2 text-sm text-[#10B981] font-semibold">
+              View all schools
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="lg:flex">
+      <!-- Left Sidebar (Desktop) -->
+      <aside class="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-stone-200 lg:bg-white">
+        <!-- Logo -->
+        <div class="flex items-center gap-3 px-6 h-16 border-b border-stone-200">
+          <div class="w-9 h-9 rounded-xl bg-[#10B981] flex items-center justify-center shadow-[3px_3px_0px_#1C1917]">
+            <span class="text-white font-bold text-lg">G</span>
+          </div>
+          <div>
+            <p class="font-bold text-lg leading-none">GPACalc</p>
+            <p class="text-xs text-stone-400">GPA Calculator</p>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto p-4">
+          <!-- Main Tools -->
+          <div class="space-y-1 mb-6">
+            {navLinks.map(link => (
+              <a
+                href={link.href}
+                class:list={[
+                  'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all',
+                  Astro.url.pathname === link.href
+                    ? 'bg-[#10B981] text-white shadow-[3px_3px_0px_#1C1917]'
+                    : 'text-stone-600 hover:bg-stone-100 hover:text-stone-900'
+                ]}
+              >
+                {link.icon === 'calc' && (
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                )}
+                {link.icon === 'convert' && (
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                  </svg>
+                )}
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          <!-- Schools Section -->
+          <div class="mb-4">
+            <p class="px-3 mb-2 text-xs font-bold text-stone-400 uppercase tracking-wider">Universities</p>
+            <div class="space-y-0.5">
+              {sgUniversities.map(school => (
+                <a
+                  href={`/schools/${school.id}`}
+                  class:list={[
+                    'flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors',
+                    currentSchool === school.id
+                      ? 'bg-[#10B981]/10 text-[#10B981] font-semibold'
+                      : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900'
+                  ]}
+                >
+                  <span>{school.shortName}</span>
+                  <span class="text-xs text-stone-400">{school.maxGPA.toFixed(1)}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <p class="px-3 mb-2 text-xs font-bold text-stone-400 uppercase tracking-wider">Polytechnics</p>
+            <div class="space-y-0.5">
+              {sgPolytechnics.map(school => (
+                <a
+                  href={`/schools/${school.id}`}
+                  class:list={[
+                    'flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors',
+                    currentSchool === school.id
+                      ? 'bg-[#10B981]/10 text-[#10B981] font-semibold'
+                      : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900'
+                  ]}
+                >
+                  <span>{school.shortName}</span>
+                  <span class="text-xs text-stone-400">{school.maxGPA.toFixed(1)}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <p class="px-3 mb-2 text-xs font-bold text-stone-400 uppercase tracking-wider">Malaysia</p>
+            <div class="space-y-0.5">
+              {myUniversities.slice(0, 3).map(school => (
+                <a
+                  href={`/schools/${school.id}`}
+                  class:list={[
+                    'flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors',
+                    currentSchool === school.id
+                      ? 'bg-[#10B981]/10 text-[#10B981] font-semibold'
+                      : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900'
+                  ]}
+                >
+                  <span>{school.shortName}</span>
+                  <span class="text-xs text-stone-400">{school.maxGPA.toFixed(1)}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <a
+            href="/schools"
+            class="flex items-center gap-2 px-3 py-2 text-sm font-semibold text-[#10B981] hover:underline"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+            All Schools
+          </a>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-stone-200">
+          <div class="px-3 py-2 text-xs text-stone-400">
+            <p>Free GPA Calculator</p>
+            <p>for Students Worldwide</p>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="lg:pl-64 w-full min-h-screen">
+        <!-- Top Ad (Desktop) -->
+        <div class="hidden sm:block border-b border-stone-200 bg-stone-100/50 py-3 px-4">
+          <div class="max-w-5xl mx-auto">
+            <AdUnit slot="top" />
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+          <slot />
+        </div>
+
+        <!-- Bottom Ad -->
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <AdUnit slot="bottom" />
+        </div>
+
+        <!-- Footer -->
+        <footer class="border-t border-stone-200 bg-white mt-8">
+          <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div>
+                <h4 class="font-bold text-sm text-stone-900 mb-3">Calculators</h4>
+                <ul class="space-y-2 text-sm">
+                  <li><a href="/" class="text-stone-500 hover:text-[#10B981]">Cumulative GPA</a></li>
+                  <li><a href="/schools/nus" class="text-stone-500 hover:text-[#10B981]">NUS GPA</a></li>
+                  <li><a href="/schools/ntu" class="text-stone-500 hover:text-[#10B981]">NTU GPA</a></li>
+                  <li><a href="/schools/smu" class="text-stone-500 hover:text-[#10B981]">SMU GPA</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-stone-900 mb-3">Converters</h4>
+                <ul class="space-y-2 text-sm">
+                  <li><a href="/gpa-to-percentage" class="text-stone-500 hover:text-[#F97316]">GPA to %</a></li>
+                  <li><a href="/percentage-to-gpa" class="text-stone-500 hover:text-[#F97316]">% to GPA</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-stone-900 mb-3">Polytechnics</h4>
+                <ul class="space-y-2 text-sm">
+                  <li><a href="/schools/sp" class="text-stone-500 hover:text-[#10B981]">SP GPA</a></li>
+                  <li><a href="/schools/np" class="text-stone-500 hover:text-[#10B981]">NP GPA</a></li>
+                  <li><a href="/schools/tp" class="text-stone-500 hover:text-[#10B981]">TP GPA</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-stone-900 mb-3">GPACalc.app</h4>
+                <p class="text-xs text-stone-400 mb-3">Free GPA calculator for students worldwide.</p>
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-lg bg-[#10B981] flex items-center justify-center">
+                    <span class="text-white font-bold text-xs">G</span>
+                  </div>
+                  <span class="text-sm font-semibold">GPACalc.app</span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-stone-200 text-center text-xs text-stone-400">
+              <p>&copy; {new Date().getFullYear()} GPACalc.app. All rights reserved.</p>
+            </div>
+          </div>
+        </footer>
+      </main>
+    </div>
+
+    <script>
+      const menuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      menuBtn?.addEventListener('click', () => {
+        mobileMenu?.classList.toggle('hidden');
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,151 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+import FAQ from '../components/FAQ.astro';
+
+const title = 'Percentage to GPA Converter';
+const description = 'Convert percentage to GPA instantly for 4.0, 5.0 and 10.0 scales. Free online percentage to GPA calculator with chart and formula.';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Percentage to GPA Converter',
+  description,
+  applicationCategory: 'EducationalApplication',
+  operatingSystem: 'Web',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD'
+  }
+};
+
+const faqs = [
+  {
+    question: 'How do I convert percentage to GPA?',
+    answer: 'A common method is GPA = (Percentage / 100) x Scale. Example: 80% on a 4.0 scale = 3.2 GPA. Always verify with your school because conversion rules can differ.'
+  },
+  {
+    question: 'What is 75% in GPA on a 4.0 scale?',
+    answer: 'Using the linear formula, 75% equals 3.0 GPA on a 4.0 scale.'
+  },
+  {
+    question: 'Does every university use the same conversion?',
+    answer: 'No. Some universities use fixed grade bands instead of a linear formula. This tool gives a fast estimate and planning baseline.'
+  },
+  {
+    question: 'Can I convert percentage to CGPA for India?',
+    answer: 'Yes. On a 10-point scale, a quick estimate is GPA = Percentage / 10. Some institutions use custom formulas, so always confirm with official guidelines.'
+  }
+];
+---
+
+<ToolLayout title={title} description={description} schema={schema} faqs={faqs}>
+  <section class="mb-6">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-3 tracking-tight">Percentage to GPA Converter</h1>
+    <p class="text-lg text-stone-500 font-medium max-w-2xl">
+      Convert your percentage score to GPA for 4.0, 5.0, and 10.0 scales. Quick estimates for university applications, scholarships, or semester targets.
+    </p>
+  </section>
+
+  <section class="mb-10">
+    <div class="bg-white border border-stone-200 rounded-2xl p-6 md:p-8">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h2 class="text-lg font-bold text-stone-900 mb-4">Enter Your Percentage</h2>
+
+          <div class="mb-4">
+            <label class="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-1.5">GPA Scale</label>
+            <select id="percent-scale" class="w-full px-4 py-2.5 border-1.5 border-stone-200 rounded-xl bg-[#FFFBF5] font-semibold text-stone-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500">
+              <option value="4">4.0 Scale</option>
+              <option value="5">5.0 Scale</option>
+              <option value="10">10.0 Scale</option>
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-xs font-bold text-stone-400 uppercase tracking-wider mb-1.5">Percentage</label>
+            <input id="percentage-input" type="number" min="0" max="100" step="0.01" placeholder="e.g. 82.5" class="w-full px-4 py-2.5 border-1.5 border-stone-200 rounded-xl bg-[#FFFBF5] font-semibold text-stone-900 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500" />
+          </div>
+
+          <button id="convert-percentage-btn" type="button" class="w-full bg-[#10B981] text-white font-bold py-3 px-6 rounded-xl hover:bg-emerald-600 transition-colors shadow-[3px_3px_0px_#1C1917]">
+            Convert to GPA
+          </button>
+        </div>
+
+        <div class="flex items-center justify-center">
+          <div id="percentage-result-wrap" class="text-center hidden">
+            <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Estimated GPA</p>
+            <p id="percentage-result" class="text-5xl font-extrabold text-emerald-600">0.00</p>
+            <p class="text-sm text-stone-400 mt-2">Based on a linear conversion model</p>
+          </div>
+          <div id="percentage-placeholder" class="text-center text-stone-300">
+            <p>Enter percentage and click convert</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const scaleSelect = document.getElementById('percent-scale');
+    const percentageInput = document.getElementById('percentage-input');
+    const button = document.getElementById('convert-percentage-btn');
+    const resultWrap = document.getElementById('percentage-result-wrap');
+    const placeholder = document.getElementById('percentage-placeholder');
+    const resultValue = document.getElementById('percentage-result');
+
+    button?.addEventListener('click', () => {
+      const scale = Number.parseFloat((scaleSelect as HTMLSelectElement)?.value || '4');
+      const percentage = Number.parseFloat((percentageInput as HTMLInputElement)?.value || '0');
+
+      if (Number.isNaN(percentage) || percentage < 0 || percentage > 100) {
+        alert('Please enter a valid percentage between 0 and 100.');
+        return;
+      }
+
+      const gpa = (percentage / 100) * scale;
+      if (resultValue) {
+        resultValue.textContent = gpa.toFixed(2);
+      }
+
+      placeholder?.classList.add('hidden');
+      resultWrap?.classList.remove('hidden');
+    });
+  </script>
+
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">Percentage to GPA Formula</h2>
+    <div class="bg-emerald-50 rounded-xl p-5 font-mono text-center text-stone-900 text-lg mb-4">
+      GPA = (Percentage / 100) x Scale
+    </div>
+    <div class="text-stone-500 font-medium leading-relaxed space-y-3">
+      <p>This formula gives a quick estimate for academic planning. Example: 82% on a 5.0 scale gives 4.10 GPA.</p>
+      <p>For official transcript conversion, always check your institution's policy because some schools map ranges to fixed grade points.</p>
+    </div>
+  </section>
+
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">Quick Conversion Examples</h2>
+    <div class="bg-white border border-stone-200 rounded-2xl overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="text-xs text-stone-400 uppercase tracking-wider bg-stone-50 border-b border-stone-200">
+          <tr>
+            <th class="px-4 py-3 text-left font-semibold">Percentage</th>
+            <th class="px-4 py-3 text-left font-semibold">4.0 Scale</th>
+            <th class="px-4 py-3 text-left font-semibold">5.0 Scale</th>
+            <th class="px-4 py-3 text-left font-semibold">10.0 Scale</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100">
+          <tr><td class="px-4 py-2.5 font-semibold text-stone-900">90%</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">3.60</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">4.50</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">9.00</td></tr>
+          <tr><td class="px-4 py-2.5 font-semibold text-stone-900">85%</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">3.40</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">4.25</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">8.50</td></tr>
+          <tr><td class="px-4 py-2.5 font-semibold text-stone-900">80%</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">3.20</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">4.00</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">8.00</td></tr>
+          <tr><td class="px-4 py-2.5 font-semibold text-stone-900">75%</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">3.00</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">3.75</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">7.50</td></tr>
+          <tr><td class="px-4 py-2.5 font-semibold text-stone-900">70%</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">2.80</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">3.50</td><td class="px-4 py-2.5 text-emerald-600 font-semibold">7.00</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <FAQ items={faqs} />
+</ToolLayout>

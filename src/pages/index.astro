@@ -1,0 +1,209 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+import GPACalculator from '../components/GPACalculator.astro';
+import FAQ from '../components/FAQ.astro';
+import AdUnit from '../components/AdUnit.astro';
+
+const title = 'Cumulative GPA Calculator - Free Online Tool';
+const description = 'Free cumulative GPA calculator for college students. Calculate your projected CGPA with our easy-to-use tool. Supports NUS, NTU, SMU and more.';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Cumulative GPA Calculator',
+  description,
+  applicationCategory: 'EducationalApplication',
+  operatingSystem: 'Web',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD'
+  }
+};
+
+const faqs = [
+  {
+    question: 'What is a cumulative GPA?',
+    answer: 'A cumulative GPA is your overall grade point average across all semesters. It combines your past credits with your latest semester performance into one number.'
+  },
+  {
+    question: 'How do I calculate cumulative GPA with previous credits?',
+    answer: 'Use this formula: <strong>New CGPA = (Current CGPA × Current Credits + Semester Grade Points) ÷ (Current Credits + Semester Credits)</strong>. The calculator handles this automatically for every scale.'
+  },
+  {
+    question: 'Does this calculator support NUS, NTU, SMU, SP and NP?',
+    answer: 'Yes. It supports major Singapore university and polytechnic scales, plus India CGPA and US/Malaysia 4.0 systems.'
+  },
+  {
+    question: 'What is the difference between GPA and CGPA?',
+    answer: '<strong>GPA</strong> usually means one semester. <strong>CGPA</strong> means your cumulative average over all completed semesters.'
+  },
+  {
+    question: 'Can I plan a target GPA for graduation?',
+    answer: 'Yes. You can use this tool to run what-if scenarios and compute the average GPA you need going forward.'
+  },
+  {
+    question: 'Can I share my GPA result?',
+    answer: 'Yes. Generate a visual GPA card (Story or Square), download it as PNG, or share the result link to WhatsApp and Telegram.'
+  }
+];
+---
+
+<ToolLayout title={title} description={description} schema={schema} faqs={faqs}>
+  <!-- Hero Section -->
+  <section class="mb-6">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        Free Tool
+      </span>
+      <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-orange-100 text-orange-700 text-sm font-semibold">
+        No Sign-up Required
+      </span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-3 tracking-tight">
+      Cumulative <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-emerald-600">GPA Calculator</span>
+    </h1>
+    <p class="text-lg text-stone-500 font-medium max-w-2xl">
+      Project your next CGPA, run what-if scenarios, and plan grade targets. Built for Singapore, Malaysia and India grading systems.
+    </p>
+  </section>
+
+  <!-- Calculator -->
+  <section class="mb-10">
+    <GPACalculator />
+  </section>
+
+  <AdUnit slot="in-content" />
+
+  <!-- Info Sections -->
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">What Is Cumulative GPA?</h2>
+    <div class="text-stone-600 font-medium leading-relaxed space-y-4">
+      <p>
+        Your <strong class="text-emerald-600">cumulative GPA (CGPA)</strong> is the weighted average of every module you have completed. It is one of the first academic metrics reviewed for scholarships, honours classification, exchange applications, internships and graduate admission screening.
+      </p>
+      <p>
+        Use this calculator early instead of waiting for final results. Projection mode shows how expected grades change your CGPA, while running what-if scenarios helps you plan realistically before exams.
+      </p>
+    </div>
+  </section>
+
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">GPA Scales by Region</h2>
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="bg-white border border-stone-200 rounded-2xl p-5">
+        <div class="text-2xl mb-3">🇸🇬</div>
+        <h3 class="font-bold text-stone-900 mb-1">Singapore Universities</h3>
+        <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-4">5.0 Scale</p>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">A+ / A</span><span class="font-semibold text-emerald-600">5.0</span></div>
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">A-</span><span class="font-semibold text-emerald-600">4.5</span></div>
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">B+</span><span class="font-semibold text-emerald-600">4.0</span></div>
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">B</span><span class="font-semibold text-emerald-600">3.5</span></div>
+          <div class="flex justify-between"><span class="text-stone-600">B-</span><span class="font-semibold text-emerald-600">3.0</span></div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-stone-200 rounded-2xl p-5">
+        <div class="text-2xl mb-3">🎓</div>
+        <h3 class="font-bold text-stone-900 mb-1">Singapore Polytechnics</h3>
+        <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-4">4.0 Scale</p>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">A</span><span class="font-semibold text-emerald-600">4.0</span></div>
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">B+</span><span class="font-semibold text-emerald-600">3.5</span></div>
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">B</span><span class="font-semibold text-emerald-600">3.0</span></div>
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">C+</span><span class="font-semibold text-emerald-600">2.5</span></div>
+          <div class="flex justify-between"><span class="text-stone-600">C</span><span class="font-semibold text-emerald-600">2.0</span></div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-stone-200 rounded-2xl p-5">
+        <div class="text-2xl mb-3">🌏</div>
+        <h3 class="font-bold text-stone-900 mb-1">Malaysia / US / India</h3>
+        <p class="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-4">4.0 / 10.0 Scale</p>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">MY A-</span><span class="font-semibold text-orange-500">3.67</span></div>
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">MY B+</span><span class="font-semibold text-orange-500">3.33</span></div>
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">US A</span><span class="font-semibold text-emerald-600">4.0</span></div>
+          <div class="flex justify-between border-b border-stone-100 pb-2"><span class="text-stone-600">India A+</span><span class="font-semibold text-emerald-600">9.0</span></div>
+          <div class="flex justify-between"><span class="text-stone-600">India O</span><span class="font-semibold text-emerald-600">10.0</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">How to Calculate Cumulative GPA</h2>
+
+    <div class="bg-stone-900 text-stone-100 p-6 rounded-2xl mb-6 font-mono text-sm overflow-x-auto">
+      <div class="mb-2"><span class="text-emerald-400">const</span> NewCGPA = (CurrentCGPA <span class="text-orange-400">×</span> CurrentCredits <span class="text-orange-400">+</span> SemesterPoints) <span class="text-orange-400">÷</span> TotalCredits;</div>
+      <div><span class="text-emerald-400">const</span> SemesterPoints = Sum(GradePoint <span class="text-orange-400">×</span> ModuleCredit);</div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="space-y-4">
+        <div class="flex gap-3">
+          <div class="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm font-bold">1</div>
+          <p class="text-stone-600"><strong class="text-stone-900">Enter your current CGPA</strong> and completed credits.</p>
+        </div>
+        <div class="flex gap-3">
+          <div class="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm font-bold">2</div>
+          <p class="text-stone-600"><strong class="text-stone-900">Add this semester modules</strong>, pick expected grades, and set module credits.</p>
+        </div>
+        <div class="flex gap-3">
+          <div class="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-sm font-bold">3</div>
+          <p class="text-stone-600"><strong class="text-stone-900">The calculator instantly updates</strong> your projected CGPA, semester GPA, and change value.</p>
+        </div>
+        <div class="flex gap-3">
+          <div class="flex-shrink-0 w-7 h-7 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-sm font-bold">4</div>
+          <p class="text-stone-600"><strong class="text-stone-900">Share your aesthetic card</strong> directly to social media after computing.</p>
+        </div>
+      </div>
+
+      <div class="bg-white border border-stone-200 rounded-2xl overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="text-xs text-stone-400 uppercase tracking-wider bg-stone-50 border-b border-stone-200">
+            <tr>
+              <th class="px-4 py-3 text-left">Module</th>
+              <th class="px-4 py-3 text-left">Grade Point</th>
+              <th class="px-4 py-3 text-center">Credits</th>
+              <th class="px-4 py-3 text-right">Points</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-stone-100 font-medium text-stone-900">
+            <tr>
+              <td class="px-4 py-3">CS1101S</td>
+              <td class="px-4 py-3 text-emerald-600">5.0 (A)</td>
+              <td class="px-4 py-3 text-center">4</td>
+              <td class="px-4 py-3 text-right">20.0</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3">MA1521</td>
+              <td class="px-4 py-3 text-emerald-600">4.0 (B+)</td>
+              <td class="px-4 py-3 text-center">4</td>
+              <td class="px-4 py-3 text-right">16.0</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3">GEA1000</td>
+              <td class="px-4 py-3 text-emerald-600">4.5 (A-)</td>
+              <td class="px-4 py-3 text-center">4</td>
+              <td class="px-4 py-3 text-right">18.0</td>
+            </tr>
+            <tr class="bg-orange-50/50 text-lg">
+              <td class="px-4 py-3 font-bold" colspan="2">Total</td>
+              <td class="px-4 py-3 text-center font-bold">12</td>
+              <td class="px-4 py-3 text-right font-extrabold text-orange-600">54.0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <AdUnit slot="in-content" />
+
+  <FAQ items={faqs} />
+</ToolLayout>

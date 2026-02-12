@@ -1,0 +1,59 @@
+---
+interface Props {
+  slot: 'top' | 'sidebar' | 'in-content' | 'bottom';
+  className?: string;
+}
+
+const { slot, className = '' } = Astro.props;
+const adClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-9622161915145913';
+
+const adStyles: Record<string, string> = {
+  'top': 'min-h-[90px]',
+  'sidebar': 'min-h-[250px]',
+  'in-content': 'min-h-[250px]',
+  'bottom': 'min-h-[90px]'
+};
+---
+
+<ins
+  class:list={['adsbygoogle', 'ad-unit', `ad-${slot}`, adStyles[slot], className]}
+  style="display:block"
+  data-ad-client={adClient}
+  data-ad-format="auto"
+  data-full-width-responsive="true"
+/>
+<script is:inline>
+  (window.adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<style>
+  .ad-unit {
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .ad-top {
+    width: 100%;
+    max-width: 56rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .ad-sidebar {
+    position: sticky;
+    top: 1rem;
+  }
+
+  .ad-in-content {
+    width: 100%;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .ad-bottom {
+    width: 100%;
+    max-width: 56rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>

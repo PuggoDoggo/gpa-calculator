@@ -1,0 +1,148 @@
+---
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import GPACalculator from '../../components/GPACalculator.astro';
+import FAQ from '../../components/FAQ.astro';
+import { schools } from '../../data/schools';
+import type { School } from '../../data/schools';
+
+export function getStaticPaths() {
+  return schools.map((school) => ({
+    params: { schoolId: school.id },
+    props: { school }
+  }));
+}
+
+const { school } = Astro.props as { school: School };
+const seo = school.seoContent;
+
+const title = `${school.shortName} GPA Calculator - Calculate Your CGPA`;
+const description = `Free ${school.shortName} GPA calculator for ${school.name}. Project semester GPA and cumulative GPA using a ${school.maxGPA.toFixed(1)} scale setup.`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: `${school.shortName} GPA Calculator`,
+  description,
+  applicationCategory: 'EducationalApplication',
+  operatingSystem: 'Web',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD'
+  }
+};
+
+const gradePointSummary = school.gradeScale
+  .map((item) => `${item.grade}=${item.points.toFixed(2)}`)
+  .join(', ');
+
+const references = seo?.sourceUrls ?? [];
+const sourceLabels = references.slice(0, 3).map((item) => item.label).join('; ');
+
+const faqs = [
+  {
+    question: `Which ${school.shortName} grade points are used on this page?`,
+    answer: `This page uses the following grade points for ${school.shortName}: ${gradePointSummary}.`
+  },
+  {
+    question: `Is this ${school.shortName} calculator valid for every programme?`,
+    answer: seo?.accuracyNote ?? `This page uses a ${school.maxGPA.toFixed(1)} planning scale. Always verify programme-level rules with your official handbook.`
+  },
+  {
+    question: `What is the maximum GPA for ${school.shortName} on this calculator?`,
+    answer: `The maximum GPA on this ${school.shortName} page is ${school.maxGPA.toFixed(1)}.`
+  },
+  {
+    question: `How can I verify ${school.shortName} grading policy before using this result?`,
+    answer: references.length
+      ? `Check the Official References section on this page first. Primary sources used: ${sourceLabels}.`
+      : 'Check your university official registrar or programme handbook before using calculator output for official decisions.'
+  }
+];
+
+const relatedSchools = schools
+  .filter((item) => item.country === school.country && item.id !== school.id)
+  .slice(0, 6);
+---
+
+<ToolLayout title={title} description={description} schema={schema} faqs={faqs} currentSchool={school.id}>
+  <section class="mb-6">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold">{school.country}</span>
+      <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-orange-100 text-orange-700 text-sm font-semibold">{school.maxGPA.toFixed(1)} Scale</span>
+    </div>
+    <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-3 tracking-tight">{school.shortName} GPA Calculator</h1>
+    <p class="text-lg text-stone-500 font-medium max-w-2xl">
+      Calculate semester GPA and projected cumulative GPA for <strong class="text-stone-700">{school.name}</strong>. School-specific grade points and official reference list included.
+    </p>
+  </section>
+
+  <section class="mb-10">
+    <GPACalculator initialSchool={school.id} />
+  </section>
+
+  <section class="mb-8 grid gap-4 md:grid-cols-2">
+    <div class="bg-white border border-stone-200 rounded-2xl p-5">
+      <h2 class="text-lg font-bold text-stone-900 mb-2">Grading Note</h2>
+      <p class="text-stone-500">{seo?.gradingNote ?? `This page uses a ${school.maxGPA.toFixed(1)} GPA scale for planning.`}</p>
+    </div>
+    <div class="bg-white border border-stone-200 rounded-2xl p-5">
+      <h2 class="text-lg font-bold text-stone-900 mb-2">Accuracy Scope</h2>
+      <p class="text-stone-500">{seo?.accuracyNote ?? 'For final transcript or progression decisions, always use your programme handbook as final authority.'}</p>
+    </div>
+  </section>
+
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">{school.shortName} Grade Points Used</h2>
+    <div class="bg-white border border-stone-200 rounded-2xl overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="text-xs text-stone-400 uppercase tracking-wider bg-stone-50 border-b border-stone-200">
+          <tr>
+            <th class="text-left px-4 py-3 font-semibold">Grade</th>
+            <th class="text-left px-4 py-3 font-semibold">Grade Point</th>
+            <th class="text-left px-4 py-3 font-semibold">Score Range</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100 text-stone-500">
+          {school.gradeScale.map((item) => (
+            <tr>
+              <td class="px-4 py-3 font-semibold text-stone-900">{item.grade}</td>
+              <td class="px-4 py-3 text-emerald-600 font-semibold">{item.points.toFixed(2)}</td>
+              <td class="px-4 py-3">
+                {item.minScore !== undefined && item.maxScore !== undefined ? `${item.minScore}-${item.maxScore}%` : 'Official scale by letter grade'}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {references.length > 0 && (
+    <section class="mb-10 bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-4">Official References</h2>
+      <ul class="space-y-2 text-stone-500">
+        {references.map((source) => (
+          <li>
+            <a href={source.url} target="_blank" rel="noopener noreferrer" class="text-emerald-600 hover:underline break-all">
+              {source.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {relatedSchools.length > 0 && (
+    <section class="mb-10 bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-4">More {school.country} GPA Calculators</h2>
+      <div class="flex flex-wrap gap-2">
+        {relatedSchools.map((item) => (
+          <a href={`/schools/${item.id}`} class="inline-flex items-center px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold hover:bg-emerald-200 transition-colors">{item.shortName} GPA Calculator</a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <FAQ items={faqs} />
+</ToolLayout>

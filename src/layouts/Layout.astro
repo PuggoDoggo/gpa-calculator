@@ -1,0 +1,275 @@
+---
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+import AdUnit from '../components/AdUnit.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  schema?: object;
+  faqs?: Array<{ question: string; answer: string }>;
+  showSidebar?: boolean;
+}
+
+const { title, description, schema, faqs, showSidebar = true } = Astro.props;
+const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-9622161915145913';
+
+const navLinks = [
+  { href: '/', label: 'Cumulative GPA' },
+  { href: '/gpa-to-percentage', label: 'GPA to %' },
+  { href: '/percentage-to-gpa', label: '% to GPA' },
+  { href: '/schools', label: 'Schools' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Space+Grotesk:wght@400;500;600;700;800&display=swap"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="index, follow" />
+    <meta name="googlebot" content="index, follow" />
+
+    <SEO
+      title={title}
+      description={description}
+      schema={schema}
+      faqs={faqs}
+    />
+
+    {adsenseClient && (
+      <script
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
+        crossorigin="anonymous"
+      ></script>
+    )}
+  </head>
+
+  <body class="min-h-screen">
+    <!-- Decorative background elements -->
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+      <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-emerald-100/40 to-transparent rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-orange-100/30 to-transparent rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-[var(--color-bg)]/80 border-b border-[var(--color-border-light)]">
+      <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <!-- Logo -->
+          <a href="/" class="flex items-center gap-2 group">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/40 transition-shadow">
+              <span class="text-white font-bold text-sm">G</span>
+            </div>
+            <span class="font-semibold text-lg">
+              <span class="text-[var(--color-text)]">GPA</span><span class="text-[var(--color-primary)]">Calc</span>
+            </span>
+          </a>
+
+          <!-- Desktop Nav -->
+          <div class="hidden md:flex items-center gap-1">
+            {navLinks.map(link => (
+              <a
+                href={link.href}
+                class:list={[
+                  'px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                  (link.href === '/' ? Astro.url.pathname === '/' : Astro.url.pathname.startsWith(link.href))
+                    ? 'bg-[var(--color-primary-100)] text-[var(--color-primary-dark)]'
+                    : 'text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-bg-alt)]'
+                ]}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          <!-- Mobile menu button -->
+          <button
+            type="button"
+            class="md:hidden p-2 rounded-lg text-[var(--color-text-muted)] hover:bg-[var(--color-bg-alt)]"
+            id="mobile-menu-btn"
+            aria-label="Open menu"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Mobile menu -->
+        <div class="hidden md:hidden pb-4" id="mobile-menu">
+          {navLinks.map(link => (
+            <a
+              href={link.href}
+              class:list={[
+                'block py-2 px-3 rounded-lg text-sm font-medium',
+                (link.href === '/' ? Astro.url.pathname === '/' : Astro.url.pathname.startsWith(link.href))
+                  ? 'bg-[var(--color-primary-100)] text-[var(--color-primary-dark)]'
+                  : 'text-[var(--color-text-muted)]'
+              ]}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </nav>
+    </header>
+
+    <!-- Top Ad -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <AdUnit slot="top" />
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {showSidebar ? (
+        <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+          <!-- Main content area -->
+          <div class="lg:col-span-8">
+            <slot />
+          </div>
+
+          <!-- Sidebar -->
+          <aside class="hidden lg:block lg:col-span-4">
+            <div class="sticky top-24 space-y-6">
+              <AdUnit slot="sidebar" />
+
+              <!-- Related calculators -->
+              <div class="card p-6">
+                <h3 class="font-semibold text-[var(--color-text)] mb-4 flex items-center gap-2">
+                  <svg class="w-5 h-5 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                  Related Tools
+                </h3>
+                <ul class="space-y-2">
+                  <li>
+                    <a href="/" class="flex items-center gap-2 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)]"></span>
+                      Cumulative GPA Calculator
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/gpa-to-percentage" class="flex items-center gap-2 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)]"></span>
+                      GPA to Percentage
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/percentage-to-gpa" class="flex items-center gap-2 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)]"></span>
+                      Percentage to GPA
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/schools" class="flex items-center gap-2 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-primary)]"></span>
+                      School GPA Calculators
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- Schools quick links -->
+              <div class="card p-6">
+                <h3 class="font-semibold text-[var(--color-text)] mb-4 flex items-center gap-2">
+                  <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                  Popular Schools
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  <a href="/schools/nus" class="badge badge-primary">NUS</a>
+                  <a href="/schools/ntu" class="badge badge-primary">NTU</a>
+                  <a href="/schools/smu" class="badge badge-primary">SMU</a>
+                  <a href="/schools/sp" class="badge badge-accent">SP</a>
+                  <a href="/schools/np" class="badge badge-accent">NP</a>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      ) : (
+        <slot />
+      )}
+    </main>
+
+    <!-- Bottom Ad -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <AdUnit slot="bottom" />
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-[var(--color-border-light)] mt-16 bg-[var(--color-surface)]">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div>
+            <h4 class="font-semibold text-[var(--color-text)] mb-4">Calculators</h4>
+            <ul class="space-y-2 text-sm">
+              <li><a href="/" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">Cumulative GPA</a></li>
+              <li><a href="/schools/nus" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">NUS GPA Calculator</a></li>
+              <li><a href="/schools/ntu" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">NTU GPA Calculator</a></li>
+              <li><a href="/schools/smu" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">SMU GPA Calculator</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-[var(--color-text)] mb-4">Converters</h4>
+            <ul class="space-y-2 text-sm">
+              <li><a href="/gpa-to-percentage" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">GPA to Percentage</a></li>
+              <li><a href="/percentage-to-gpa" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">Percentage to GPA</a></li>
+              <li><a href="/schools/sp" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">SP GPA Calculator</a></li>
+              <li><a href="/schools/np" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">NP GPA Calculator</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-[var(--color-text)] mb-4">Schools</h4>
+            <ul class="space-y-2 text-sm">
+              <li><a href="/schools/nus" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">NUS</a></li>
+              <li><a href="/schools/ntu" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">NTU</a></li>
+              <li><a href="/schools/smu" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">SMU</a></li>
+              <li><a href="/schools" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">All Schools</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 class="font-semibold text-[var(--color-text)] mb-4">GPACalc.app</h4>
+            <p class="text-sm text-[var(--color-text-muted)] mb-4">
+              Free GPA calculator for students worldwide. Calculate cumulative GPA, CGPA, and more.
+            </p>
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
+                <span class="text-white font-bold text-xs">G</span>
+              </div>
+              <span class="text-sm font-medium text-[var(--color-text)]">GPACalc.app</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-[var(--color-border-light)] mt-8 pt-8 text-center text-sm text-[var(--color-text-muted)]">
+          <p>&copy; {new Date().getFullYear()} GPACalc.app. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Mobile menu script -->
+    <script>
+      const menuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+
+      menuBtn?.addEventListener('click', () => {
+        mobileMenu?.classList.toggle('hidden');
+      });
+    </script>
+  </body>
+</html>

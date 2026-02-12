@@ -1,0 +1,1494 @@
+---
+interface Props {
+  initialSchool?: string;
+}
+
+const { initialSchool = 'nus' } = Astro.props;
+---
+
+<div class="gpa-calculator" data-initial-school={initialSchool}>
+  <div class="calc-layout">
+    <!-- Left Column: Inputs -->
+    <div class="calc-inputs">
+      <!-- Step 1 + 2 Combined: Current Status -->
+      <div class="input-card">
+        <div class="input-card-header">
+          <div class="step-indicator">
+            <span class="step-num">1</span>
+            <div>
+              <h2 class="step-title">Your Info</h2>
+              <p class="step-desc">Current GPA and grading scale</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-grid-3">
+          <div class="input-field">
+            <label for="current-cgpa">Current CGPA</label>
+            <input type="number" id="current-cgpa" placeholder="3.50" min="0" step="0.01" />
+          </div>
+          <div class="input-field">
+            <label for="current-credits">Credits Done</label>
+            <input type="number" id="current-credits" placeholder="60" min="0" step="1" />
+          </div>
+          <div class="input-field">
+            <label for="school-select">Scale</label>
+            <select id="school-select">
+              <option value="nus">NUS / NTU (5.0)</option>
+              <option value="smu">SMU (4.0)</option>
+              <option value="sp">SP / NP / TP (4.0)</option>
+              <option value="us-standard">US Standard (4.0)</option>
+              <option value="india-cgpa">India (10.0)</option>
+              <option value="um">Malaysia (4.0)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Modules -->
+      <div class="input-card">
+        <div class="input-card-header">
+          <div class="step-indicator">
+            <span class="step-num">2</span>
+            <div>
+              <h2 class="step-title">This Semester</h2>
+              <p class="step-desc">Add your modules and grades</p>
+            </div>
+          </div>
+          <button type="button" id="clear-modules-btn" class="clear-btn" title="Clear all modules">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+            </svg>
+            Clear
+          </button>
+        </div>
+
+        <div class="modules-wrapper">
+          <div class="modules-header-row">
+            <span>Module</span>
+            <span>Grade</span>
+            <span>Credits</span>
+            <span></span>
+          </div>
+          <div id="modules-list"></div>
+        </div>
+
+        <button type="button" id="add-module-btn" class="add-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Add Module
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Column: Results + Share -->
+    <div class="calc-results">
+      <!-- Result Card (Light Theme) -->
+      <div class="result-card-wrap">
+        <div class="result-card" id="result-card">
+          <!-- Decorative Blurs -->
+          <div class="result-blur result-blur-1"></div>
+          <div class="result-blur result-blur-2"></div>
+
+          <div class="result-content">
+            <div class="result-header">
+              <div class="result-brand">
+                <span class="result-logo">G</span>
+                <span class="result-brand-name">GPACalc</span>
+              </div>
+              <span id="result-school-badge" class="result-badge">NUS 5.0</span>
+            </div>
+
+            <div class="result-main">
+              <p class="result-label">Projected CGPA</p>
+              <p id="result-cgpa" class="result-value">0.00</p>
+              <div id="result-change-wrap" class="result-change hidden">
+                <span id="result-change"></span>
+              </div>
+            </div>
+
+            <div class="result-stats-row">
+              <div class="result-stat">
+                <span class="result-stat-label">Semester GPA</span>
+                <span id="result-semester" class="result-stat-value">0.00</span>
+              </div>
+              <div class="result-stat">
+                <span class="result-stat-label">Total Credits</span>
+                <span id="result-credits" class="result-stat-value">0</span>
+              </div>
+            </div>
+
+            <div class="result-footer">gpacalc.app</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Share Panel -->
+      <div class="share-card">
+        <div class="share-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+          <h3>Share Your Result</h3>
+        </div>
+
+        <div class="share-options-row">
+          <div class="share-option">
+            <label>Format</label>
+            <div class="option-btns">
+              <button type="button" class="option-btn active" data-format="story">Story</button>
+              <button type="button" class="option-btn" data-format="square">Square</button>
+            </div>
+          </div>
+          <div class="share-option">
+            <label>Theme</label>
+            <div class="option-btns">
+              <button type="button" class="theme-btn" data-theme="dark">Dark</button>
+              <button type="button" class="theme-btn active" data-theme="light">Light</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="share-actions">
+          <button type="button" id="share-download" class="share-btn share-btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7,10 12,15 17,10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Download PNG
+          </button>
+          <div class="share-social-grid">
+            <button type="button" id="share-whatsapp" class="share-btn share-btn-whatsapp">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              WhatsApp
+            </button>
+            <button type="button" id="share-telegram" class="share-btn share-btn-telegram">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+              </svg>
+              Telegram
+            </button>
+            <button type="button" id="share-x" class="share-btn share-btn-x">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+              X
+            </button>
+            <button type="button" id="share-facebook" class="share-btn share-btn-facebook">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              Facebook
+            </button>
+            <button type="button" id="share-copy" class="share-btn share-btn-copy">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Copy Link
+            </button>
+          </div>
+        </div>
+        <p id="share-status" class="share-status"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Module Row Template -->
+<template id="module-template">
+  <div class="module-row">
+    <input type="text" class="module-name" placeholder="CS1101S" />
+    <select class="module-grade">
+      <option value="">Grade</option>
+    </select>
+    <input type="number" class="module-credits" placeholder="4" min="0" max="20" />
+    <button type="button" class="remove-btn" aria-label="Remove">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+</template>
+
+<!-- Hidden Export Card -->
+<div class="export-container" aria-hidden="true">
+  <div id="export-card" class="export-card" data-format="story" data-theme="light">
+    <div class="export-bg"></div>
+    <div class="export-content">
+      <div class="export-header">
+        <div class="export-brand">
+          <span class="export-logo">G</span>
+          <div>
+            <p class="export-brand-name">GPACalc</p>
+            <p class="export-brand-sub">My GPA Result</p>
+          </div>
+        </div>
+        <span id="export-school" class="export-school">NUS 5.0</span>
+      </div>
+
+      <div class="export-main">
+        <p class="export-label">Projected CGPA</p>
+        <p id="export-cgpa" class="export-value">0.00</p>
+        <div id="export-change-wrap" class="export-change">
+          <span id="export-change">+0.00 from current</span>
+        </div>
+      </div>
+
+      <div class="export-stats">
+        <div class="export-stat">
+          <p class="export-stat-label">Semester GPA</p>
+          <p id="export-semester" class="export-stat-value">0.00</p>
+        </div>
+        <div class="export-stat">
+          <p class="export-stat-label">Total Credits</p>
+          <p id="export-credits" class="export-stat-value">0</p>
+        </div>
+      </div>
+
+      <div class="export-footer">gpacalc.app</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  type GradeItem = { grade: string; points: number };
+
+  const gradeScales: Record<string, GradeItem[]> = {
+    nus: [
+      { grade: 'A+', points: 5.0 }, { grade: 'A', points: 5.0 }, { grade: 'A-', points: 4.5 },
+      { grade: 'B+', points: 4.0 }, { grade: 'B', points: 3.5 }, { grade: 'B-', points: 3.0 },
+      { grade: 'C+', points: 2.5 }, { grade: 'C', points: 2.0 },
+      { grade: 'D+', points: 1.5 }, { grade: 'D', points: 1.0 }, { grade: 'F', points: 0.0 }
+    ],
+    smu: [
+      { grade: 'A+', points: 4.0 }, { grade: 'A', points: 4.0 }, { grade: 'A-', points: 3.7 },
+      { grade: 'B+', points: 3.3 }, { grade: 'B', points: 3.0 }, { grade: 'B-', points: 2.7 },
+      { grade: 'C+', points: 2.3 }, { grade: 'C', points: 2.0 }, { grade: 'C-', points: 1.7 },
+      { grade: 'D+', points: 1.3 }, { grade: 'D', points: 1.0 }, { grade: 'F', points: 0.0 }
+    ],
+    sp: [
+      { grade: 'A', points: 4.0 }, { grade: 'B+', points: 3.5 }, { grade: 'B', points: 3.0 },
+      { grade: 'C+', points: 2.5 }, { grade: 'C', points: 2.0 },
+      { grade: 'D+', points: 1.5 }, { grade: 'D', points: 1.0 }, { grade: 'F', points: 0.0 }
+    ],
+    'us-standard': [
+      { grade: 'A+', points: 4.0 }, { grade: 'A', points: 4.0 }, { grade: 'A-', points: 3.7 },
+      { grade: 'B+', points: 3.3 }, { grade: 'B', points: 3.0 }, { grade: 'B-', points: 2.7 },
+      { grade: 'C+', points: 2.3 }, { grade: 'C', points: 2.0 }, { grade: 'C-', points: 1.7 },
+      { grade: 'D', points: 1.0 }, { grade: 'F', points: 0.0 }
+    ],
+    'india-cgpa': [
+      { grade: 'O', points: 10.0 }, { grade: 'A+', points: 9.0 }, { grade: 'A', points: 8.0 },
+      { grade: 'B+', points: 7.0 }, { grade: 'B', points: 6.0 }, { grade: 'C', points: 5.0 },
+      { grade: 'P', points: 4.0 }, { grade: 'F', points: 0.0 }
+    ],
+    um: [
+      { grade: 'A+', points: 4.0 }, { grade: 'A', points: 4.0 }, { grade: 'A-', points: 3.67 },
+      { grade: 'B+', points: 3.33 }, { grade: 'B', points: 3.0 }, { grade: 'B-', points: 2.67 },
+      { grade: 'C+', points: 2.33 }, { grade: 'C', points: 2.0 }, { grade: 'D', points: 1.0 },
+      { grade: 'F', points: 0.0 }
+    ]
+  };
+
+  const schoolLabels: Record<string, string> = {
+    nus: 'NUS 5.0',
+    smu: 'SMU 4.0',
+    sp: 'Poly 4.0',
+    'us-standard': 'US 4.0',
+    'india-cgpa': 'India 10.0',
+    um: 'Malaysia 4.0'
+  };
+
+  const rootEl = document.querySelector('.gpa-calculator') as HTMLElement;
+  const initialSchool = rootEl?.dataset.initialSchool || 'nus';
+
+  let currentSchool = initialSchool in gradeScales ? initialSchool : 'nus';
+  let currentTheme = 'light';
+  let currentFormat = 'story';
+
+  // DOM Elements
+  const schoolSelect = document.getElementById('school-select') as HTMLSelectElement;
+  const currentCGPAInput = document.getElementById('current-cgpa') as HTMLInputElement;
+  const currentCreditsInput = document.getElementById('current-credits') as HTMLInputElement;
+  const modulesList = document.getElementById('modules-list') as HTMLElement;
+  const template = document.getElementById('module-template') as HTMLTemplateElement;
+  const addBtn = document.getElementById('add-module-btn');
+  const clearBtn = document.getElementById('clear-modules-btn');
+
+  // Result elements
+  const resultSchoolBadge = document.getElementById('result-school-badge');
+  const resultCGPA = document.getElementById('result-cgpa');
+  const resultSemester = document.getElementById('result-semester');
+  const resultCredits = document.getElementById('result-credits');
+  const resultChangeWrap = document.getElementById('result-change-wrap');
+  const resultChange = document.getElementById('result-change');
+
+  // Export elements
+  const exportCard = document.getElementById('export-card') as HTMLElement;
+  const exportSchool = document.getElementById('export-school');
+  const exportCGPA = document.getElementById('export-cgpa');
+  const exportSemester = document.getElementById('export-semester');
+  const exportCredits = document.getElementById('export-credits');
+  const exportChangeWrap = document.getElementById('export-change-wrap');
+  const exportChange = document.getElementById('export-change');
+
+  // Share elements
+  const formatBtns = document.querySelectorAll('.option-btn');
+  const themeBtns = document.querySelectorAll('.theme-btn');
+  const shareStatus = document.getElementById('share-status');
+
+  function getScale() {
+    return gradeScales[currentSchool] || gradeScales.nus;
+  }
+
+  function updateGradeOptions() {
+    const scale = getScale();
+    document.querySelectorAll('.module-grade').forEach((select) => {
+      const gradeSelect = select as HTMLSelectElement;
+      const currentValue = gradeSelect.value;
+      gradeSelect.innerHTML = '<option value="">Grade</option>' +
+        scale.map((item) => `<option value="${item.points}">${item.grade}</option>`).join('');
+      if (currentValue) {
+        const hasValue = scale.some((item) => item.points.toString() === currentValue);
+        gradeSelect.value = hasValue ? currentValue : '';
+      }
+    });
+  }
+
+  function calculate() {
+    const currentCGPA = parseFloat(currentCGPAInput?.value || '0') || 0;
+    const currentCredits = parseFloat(currentCreditsInput?.value || '0') || 0;
+
+    let semesterPoints = 0;
+    let semesterCredits = 0;
+
+    document.querySelectorAll('.module-row').forEach((row) => {
+      const grade = parseFloat((row.querySelector('.module-grade') as HTMLSelectElement)?.value || '0') || 0;
+      const credits = parseFloat((row.querySelector('.module-credits') as HTMLInputElement)?.value || '0') || 0;
+      if (credits > 0 && grade > 0) {
+        semesterPoints += grade * credits;
+        semesterCredits += credits;
+      }
+    });
+
+    const semesterGPA = semesterCredits > 0 ? semesterPoints / semesterCredits : 0;
+    let projectedCGPA = semesterGPA;
+    let totalCredits = semesterCredits;
+    let change: number | null = null;
+
+    if (currentCGPA > 0 && currentCredits > 0) {
+      const totalPoints = currentCGPA * currentCredits + semesterPoints;
+      totalCredits = currentCredits + semesterCredits;
+      projectedCGPA = totalCredits > 0 ? totalPoints / totalCredits : 0;
+      if (semesterCredits > 0) {
+        change = projectedCGPA - currentCGPA;
+      }
+    }
+
+    // Update result card
+    if (resultSchoolBadge) resultSchoolBadge.textContent = schoolLabels[currentSchool] || 'GPA';
+    if (resultCGPA) resultCGPA.textContent = projectedCGPA.toFixed(2);
+    if (resultSemester) resultSemester.textContent = semesterGPA.toFixed(2);
+    if (resultCredits) resultCredits.textContent = totalCredits.toString();
+
+    if (resultChangeWrap && resultChange) {
+      if (change !== null) {
+        const sign = change >= 0 ? '+' : '';
+        resultChange.textContent = `${sign}${change.toFixed(3)}`;
+        resultChangeWrap.classList.remove('hidden');
+        resultChangeWrap.classList.toggle('positive', change >= 0);
+        resultChangeWrap.classList.toggle('negative', change < 0);
+      } else {
+        resultChangeWrap.classList.add('hidden');
+      }
+    }
+
+    // Update export card
+    if (exportSchool) exportSchool.textContent = schoolLabels[currentSchool] || 'GPA';
+    if (exportCGPA) exportCGPA.textContent = projectedCGPA.toFixed(2);
+    if (exportSemester) exportSemester.textContent = semesterGPA.toFixed(2);
+    if (exportCredits) exportCredits.textContent = totalCredits.toString();
+
+    if (exportChangeWrap && exportChange) {
+      if (change !== null) {
+        const sign = change >= 0 ? '+' : '';
+        exportChange.textContent = `${sign}${change.toFixed(3)} from current`;
+        exportChangeWrap.classList.remove('hidden');
+        exportChangeWrap.classList.toggle('positive', change >= 0);
+        exportChangeWrap.classList.toggle('negative', change < 0);
+      } else {
+        exportChangeWrap.classList.add('hidden');
+      }
+    }
+  }
+
+  function addModule() {
+    if (!template || !modulesList) return;
+    const clone = template.content.cloneNode(true) as DocumentFragment;
+    const row = clone.querySelector('.module-row') as HTMLElement;
+    const gradeSelect = row.querySelector('.module-grade') as HTMLSelectElement;
+
+    const scale = getScale();
+    gradeSelect.innerHTML = '<option value="">Grade</option>' +
+      scale.map((item) => `<option value="${item.points}">${item.grade}</option>`).join('');
+
+    row.querySelector('.remove-btn')?.addEventListener('click', () => {
+      row.remove();
+      calculate();
+    });
+
+    row.querySelectorAll('input, select').forEach((el) => {
+      el.addEventListener('input', calculate);
+      el.addEventListener('change', calculate);
+    });
+
+    modulesList.appendChild(clone);
+  }
+
+  function clearModules() {
+    if (!modulesList) return;
+    modulesList.innerHTML = '';
+    for (let i = 0; i < 4; i++) addModule();
+    calculate();
+  }
+
+  function syncExportCard() {
+    exportCard.dataset.format = currentFormat;
+    exportCard.dataset.theme = currentTheme;
+  }
+
+  async function createCardDataUrl() {
+    syncExportCard();
+    const [{ default: html2canvas }] = await Promise.all([import('html2canvas')]);
+    const canvas = await html2canvas(exportCard, {
+      scale: 2,
+      backgroundColor: null,
+      useCORS: true,
+      width: exportCard.offsetWidth,
+      height: exportCard.offsetHeight,
+      logging: false
+    });
+    return canvas.toDataURL('image/png');
+  }
+
+  function setStatus(msg: string) {
+    if (shareStatus) {
+      shareStatus.textContent = msg;
+      if (msg) {
+        setTimeout(() => { if (shareStatus) shareStatus.textContent = ''; }, 3000);
+      }
+    }
+  }
+
+  async function handleDownload() {
+    try {
+      setStatus('Generating...');
+      const dataUrl = await createCardDataUrl();
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = `gpa-${Date.now()}.png`;
+      link.click();
+      setStatus('Downloaded!');
+    } catch (e) {
+      console.error(e);
+      setStatus('Error generating image');
+    }
+  }
+
+  async function handleShare(platform: 'whatsapp' | 'telegram' | 'x' | 'facebook') {
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent('Check my GPA result!');
+
+    const shareUrls: Record<string, string> = {
+      whatsapp: `https://wa.me/?text=${text}%20${url}`,
+      telegram: `https://t.me/share/url?url=${url}&text=${text}`,
+      x: `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`
+    };
+
+    window.open(shareUrls[platform], '_blank', 'width=600,height=400');
+  }
+
+  async function handleCopyLink() {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setStatus('Link copied!');
+    } catch {
+      setStatus('Failed to copy');
+    }
+  }
+
+  // Initialize
+  if (schoolSelect) {
+    const schoolMap: Record<string, string> = {
+      nus: 'nus', ntu: 'nus', suss: 'nus', sutd: 'nus', sit: 'nus',
+      smu: 'smu',
+      sp: 'sp', np: 'sp', tp: 'sp', nyp: 'sp', rp: 'sp',
+      'us-standard': 'us-standard',
+      'india-cgpa': 'india-cgpa',
+      um: 'um', ukm: 'um', usm: 'um', utm: 'um', upm: 'um'
+    };
+    const mappedSchool = schoolMap[initialSchool] || 'nus';
+    schoolSelect.value = mappedSchool;
+    currentSchool = mappedSchool;
+
+    schoolSelect.addEventListener('change', () => {
+      currentSchool = schoolSelect.value;
+      updateGradeOptions();
+      calculate();
+    });
+  }
+
+  [currentCGPAInput, currentCreditsInput].forEach((input) => {
+    input?.addEventListener('input', calculate);
+  });
+
+  addBtn?.addEventListener('click', addModule);
+  clearBtn?.addEventListener('click', clearModules);
+
+  formatBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      currentFormat = (btn as HTMLElement).dataset.format || 'story';
+      formatBtns.forEach((b) => b.classList.toggle('active', b === btn));
+      syncExportCard();
+    });
+  });
+
+  themeBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      currentTheme = (btn as HTMLElement).dataset.theme || 'light';
+      themeBtns.forEach((b) => b.classList.toggle('active', b === btn));
+      syncExportCard();
+    });
+  });
+
+  document.getElementById('share-download')?.addEventListener('click', handleDownload);
+  document.getElementById('share-whatsapp')?.addEventListener('click', () => handleShare('whatsapp'));
+  document.getElementById('share-telegram')?.addEventListener('click', () => handleShare('telegram'));
+  document.getElementById('share-x')?.addEventListener('click', () => handleShare('x'));
+  document.getElementById('share-facebook')?.addEventListener('click', () => handleShare('facebook'));
+  document.getElementById('share-copy')?.addEventListener('click', handleCopyLink);
+
+  // Add initial modules
+  for (let i = 0; i < 4; i++) addModule();
+  calculate();
+</script>
+
+<style>
+  .gpa-calculator {
+    --c-primary: #10b981;
+    --c-primary-dark: #059669;
+    --c-accent: #f97316;
+    --c-bg: #fafaf9;
+    --c-surface: #ffffff;
+    --c-border: #e7e5e4;
+    --c-text: #1c1917;
+    --c-text-muted: #78716c;
+    --c-text-light: #a8a29e;
+    --c-dark: #1c1917;
+    --c-dark-surface: #292524;
+    --c-dark-border: #44403c;
+  }
+
+  /* Main Calculator Layout */
+  .calc-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* Desktop (xl+): Side by side layout - need enough space after sidebar (256px) */
+  @media (min-width: 1280px) {
+    .calc-layout {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 24px;
+    }
+  }
+
+  /* Left Column: Input Forms */
+  .calc-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+
+  @media (min-width: 1280px) {
+    .calc-inputs {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  /* Right Column: Results + Share */
+  .calc-results {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  @media (min-width: 1280px) {
+    .calc-results {
+      flex-shrink: 0;
+      width: 300px;
+      position: sticky;
+      top: 24px;
+    }
+  }
+
+  /* Input Card */
+  .input-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 20px;
+    padding: 20px;
+  }
+
+  .input-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .step-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--c-primary);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 0px var(--c-dark);
+  }
+
+  .step-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--c-text);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--c-text-muted);
+    margin: 2px 0 0;
+  }
+
+  .clear-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--c-text-muted);
+    background: transparent;
+    border: 1px solid var(--c-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .clear-btn:hover {
+    color: #ef4444;
+    border-color: #fecaca;
+    background: #fef2f2;
+  }
+
+  /* Input Grid - Responsive 3-column layout */
+  .input-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Tablet: 2 columns, Scale takes full width */
+  @media (min-width: 480px) {
+    .input-grid-3 {
+      grid-template-columns: 1fr 1fr;
+    }
+    .input-grid-3 > *:last-child {
+      grid-column: span 2;
+    }
+  }
+
+  /* Desktop: 3 columns */
+  @media (min-width: 768px) {
+    .input-grid-3 {
+      grid-template-columns: 1fr 1fr 1.5fr;
+    }
+    .input-grid-3 > *:last-child {
+      grid-column: auto;
+    }
+  }
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .input-field label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .input-field input,
+  .input-field select {
+    padding: 10px 12px;
+    border: 1.5px solid var(--c-border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--c-text);
+    background: var(--c-bg);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .input-field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2378716c' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+
+  .input-field input:focus,
+  .input-field select:focus {
+    outline: none;
+    border-color: var(--c-primary);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  }
+
+  .input-field input::placeholder {
+    color: var(--c-text-light);
+    font-weight: 400;
+  }
+
+  /* Modules */
+  .modules-wrapper {
+    background: var(--c-bg);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  /* Module Header Row - Desktop only */
+  .modules-header-row {
+    display: none;
+    grid-template-columns: 1fr 100px 80px 40px;
+    gap: 8px;
+    padding: 0 4px 8px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  @media (min-width: 640px) {
+    .modules-header-row {
+      display: grid;
+    }
+  }
+
+  /* Module Row - Responsive */
+  .module-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 12px;
+    background: var(--c-surface);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--c-border);
+    position: relative;
+  }
+
+  .module-row .module-name {
+    grid-column: span 2;
+  }
+
+  .module-row .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Tablet+ : Table-like layout */
+  @media (min-width: 640px) {
+    .module-row {
+      grid-template-columns: 1fr 100px 80px 40px;
+      padding: 6px 4px;
+      background: transparent;
+      border-radius: 8px;
+      margin-bottom: 0;
+      border: none;
+    }
+
+    .module-row:hover {
+      background: rgba(0,0,0,0.02);
+    }
+
+    .module-row .module-name {
+      grid-column: auto;
+    }
+
+    .module-row .remove-btn {
+      position: static;
+      width: 32px;
+      height: 32px;
+      align-self: center;
+    }
+  }
+
+  .module-name,
+  .module-grade,
+  .module-credits {
+    padding: 8px 10px;
+    border: 1.5px solid var(--c-border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--c-text);
+    background: var(--c-surface);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+
+  .module-name:focus,
+  .module-grade:focus,
+  .module-credits:focus {
+    outline: none;
+    border-color: var(--c-primary);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  }
+
+  .module-grade {
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2378716c' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 6px center;
+    padding-right: 22px;
+  }
+
+  .module-credits {
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .remove-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: var(--c-text-light);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    align-self: center;
+  }
+
+  .remove-btn:hover {
+    background: #fef2f2;
+    color: #ef4444;
+  }
+
+  .add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    border: 2px dashed var(--c-border);
+    border-radius: 12px;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--c-text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .add-btn:hover {
+    border-color: var(--c-primary);
+    color: var(--c-primary);
+    background: rgba(16, 185, 129, 0.05);
+  }
+
+  /* Result Card */
+  .result-card-wrap {
+    padding: 4px;
+    background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-primary-dark) 100%);
+    border-radius: 24px;
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
+  }
+
+  .result-card {
+    background: var(--c-surface);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-blur {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+  }
+
+  .result-blur-1 {
+    width: 150px;
+    height: 150px;
+    top: -50px;
+    right: -50px;
+    background: var(--c-primary);
+    opacity: 0.08;
+  }
+
+  .result-blur-2 {
+    width: 200px;
+    height: 200px;
+    bottom: -80px;
+    left: -80px;
+    background: var(--c-accent);
+    opacity: 0.08;
+  }
+
+  .result-content {
+    position: relative;
+    z-index: 1;
+    padding: 20px;
+  }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .result-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .result-logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--c-primary);
+    color: white;
+    font-size: 16px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .result-brand-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--c-text);
+  }
+
+  .result-badge {
+    padding: 6px 12px;
+    background: var(--c-bg);
+    border: 1px solid var(--c-border);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--c-text-muted);
+  }
+
+  .result-main {
+    text-align: center;
+    padding: 12px 0 20px;
+  }
+
+  .result-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0 0 4px;
+  }
+
+  .result-value {
+    font-size: 56px;
+    font-weight: 800;
+    color: var(--c-text);
+    line-height: 1;
+    margin: 0;
+    letter-spacing: -0.03em;
+  }
+
+  .result-change {
+    display: inline-flex;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  .result-change.positive {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+  }
+
+  .result-change.negative {
+    background: rgba(249, 115, 22, 0.15);
+    color: #c2410c;
+  }
+
+  .result-stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .result-stat {
+    background: var(--c-bg);
+    border: 1px solid var(--c-border);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .result-stat-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 2px;
+  }
+
+  .result-stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--c-text);
+  }
+
+  .result-footer {
+    text-align: center;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--c-border);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--c-primary);
+  }
+
+  /* Share Card */
+  .share-card {
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  .share-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .share-header svg {
+    color: var(--c-primary);
+    width: 18px;
+    height: 18px;
+  }
+
+  .share-header h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--c-text);
+    margin: 0;
+  }
+
+  .share-options-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .share-option {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .share-option label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+  }
+
+  .option-btns,
+  .theme-btns {
+    display: flex;
+    gap: 4px;
+  }
+
+  .option-btn,
+  .theme-btn {
+    flex: 1;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--c-text-muted);
+    background: var(--c-bg);
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .option-btn.active,
+  .theme-btn.active {
+    background: var(--c-primary);
+    color: white;
+    border-color: var(--c-primary);
+  }
+
+  .share-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .share-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .share-btn-primary {
+    background: var(--c-primary);
+    color: white;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .share-btn-primary:hover {
+    background: var(--c-primary-dark);
+  }
+
+  .share-social-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .share-btn-whatsapp {
+    background: rgba(37, 211, 102, 0.1);
+    color: #25d366;
+  }
+
+  .share-btn-whatsapp:hover {
+    background: rgba(37, 211, 102, 0.2);
+  }
+
+  .share-btn-telegram {
+    background: rgba(0, 136, 204, 0.1);
+    color: #0088cc;
+  }
+
+  .share-btn-telegram:hover {
+    background: rgba(0, 136, 204, 0.2);
+  }
+
+  .share-btn-x {
+    background: rgba(0, 0, 0, 0.05);
+    color: #000;
+  }
+
+  .share-btn-x:hover {
+    background: rgba(0, 0, 0, 0.1);
+  }
+
+  .share-btn-facebook {
+    background: rgba(24, 119, 242, 0.1);
+    color: #1877f2;
+  }
+
+  .share-btn-facebook:hover {
+    background: rgba(24, 119, 242, 0.2);
+  }
+
+  .share-btn-copy {
+    background: var(--c-bg);
+    color: var(--c-text-muted);
+    border: 1px solid var(--c-border);
+    grid-column: span 2;
+  }
+
+  .share-btn-copy:hover {
+    background: var(--c-border);
+    color: var(--c-text);
+  }
+
+  .share-status {
+    font-size: 12px;
+    color: var(--c-primary);
+    text-align: center;
+    margin-top: 8px;
+    min-height: 18px;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  /* Export Card (Hidden) */
+  .export-container {
+    position: fixed;
+    left: -99999px;
+    top: 0;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .export-card {
+    width: 1080px;
+    height: 1920px;
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    position: relative;
+    overflow: hidden;
+
+    --export-bg: #1c1917;
+    --export-text: #fafaf9;
+    --export-text-muted: #a8a29e;
+    --export-primary: #10b981;
+    --export-surface: #292524;
+    --export-border: #44403c;
+  }
+
+  .export-card[data-format="square"] {
+    height: 1080px;
+  }
+
+  .export-card[data-theme="light"] {
+    --export-bg: #fffbf5;
+    --export-text: #1c1917;
+    --export-text-muted: #78716c;
+    --export-surface: #ffffff;
+    --export-border: #e7e5e4;
+  }
+
+  .export-bg {
+    position: absolute;
+    inset: 0;
+    background: var(--export-bg);
+    background-image:
+      radial-gradient(circle at 80% 10%, rgba(16, 185, 129, 0.15) 0, transparent 40%),
+      radial-gradient(circle at 20% 90%, rgba(249, 115, 22, 0.12) 0, transparent 40%);
+  }
+
+  .export-content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  .export-card[data-format="square"] .export-content {
+    padding: 60px;
+  }
+
+  .export-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .export-brand {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .export-logo {
+    width: 72px;
+    height: 72px;
+    border-radius: 18px;
+    background: var(--export-primary);
+    color: white;
+    font-size: 40px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .export-brand-name {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--export-text);
+    margin: 0;
+  }
+
+  .export-brand-sub {
+    font-size: 20px;
+    color: var(--export-text-muted);
+    margin: 4px 0 0;
+  }
+
+  .export-school {
+    padding: 14px 28px;
+    background: var(--export-surface);
+    border: 2px solid var(--export-border);
+    border-radius: 999px;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--export-text);
+  }
+
+  .export-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .export-label {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--export-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin: 0;
+  }
+
+  .export-value {
+    font-size: 280px;
+    font-weight: 800;
+    color: var(--export-text);
+    line-height: 1;
+    margin: 0;
+    letter-spacing: -0.05em;
+  }
+
+  .export-card[data-format="square"] .export-value {
+    font-size: 200px;
+  }
+
+  .export-change {
+    display: inline-flex;
+    padding: 16px 32px;
+    border-radius: 999px;
+    font-size: 28px;
+    font-weight: 700;
+    margin-top: 20px;
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+  }
+
+  .export-change.negative {
+    background: rgba(249, 115, 22, 0.15);
+    color: #fdba74;
+  }
+
+  .export-card[data-theme="light"] .export-change {
+    color: #059669;
+  }
+
+  .export-card[data-theme="light"] .export-change.negative {
+    color: #c2410c;
+  }
+
+  .export-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: auto;
+  }
+
+  .export-stat {
+    background: var(--export-surface);
+    border: 2px solid var(--export-border);
+    border-radius: 24px;
+    padding: 32px;
+    text-align: center;
+  }
+
+  .export-stat-label {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--export-text-muted);
+    margin: 0 0 8px;
+  }
+
+  .export-stat-value {
+    font-size: 64px;
+    font-weight: 800;
+    color: var(--export-text);
+    margin: 0;
+  }
+
+  .export-footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--export-primary);
+  }
+</style>
