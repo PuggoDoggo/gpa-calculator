@@ -1577,7 +1577,7 @@ const { initialSchool = '' } = Astro.props;
     align-items: center;
     justify-content: center;
     text-align: center;
-    gap: 16px;
+    gap: 0;
   }
 
   .export-label {
@@ -1586,7 +1586,7 @@ const { initialSchool = '' } = Astro.props;
     color: var(--export-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.2em;
-    margin: 0;
+    margin: 0 0 16px;
   }
 
   .export-value {
@@ -1595,10 +1595,12 @@ const { initialSchool = '' } = Astro.props;
     color: var(--export-text);
     line-height: 1;
     margin: 0;
+    padding-bottom: 0;
     letter-spacing: -0.05em;
     font-variant-numeric: tabular-nums lining-nums;
     font-feature-settings: "tnum" 1, "lnum" 1;
     white-space: nowrap;
+    overflow: visible;
   }
 
   .export-card[data-format="square"] .export-value {
@@ -1606,7 +1608,7 @@ const { initialSchool = '' } = Astro.props;
   }
 
   .export-card[data-format="square"] .export-main {
-    gap: 18px;
+    gap: 0;
   }
 
   .export-change-row {
@@ -1614,7 +1616,7 @@ const { initialSchool = '' } = Astro.props;
     justify-content: center;
     align-items: center;
     min-height: 60px;
-    margin: 0;
+    margin-top: 120px;
     flex-shrink: 0;
   }
 
