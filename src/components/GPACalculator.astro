@@ -3,7 +3,7 @@ interface Props {
   initialSchool?: string;
 }
 
-const { initialSchool = 'nus' } = Astro.props;
+const { initialSchool = '' } = Astro.props;
 ---
 
 <div class="gpa-calculator" data-initial-school={initialSchool}>
@@ -34,6 +34,7 @@ const { initialSchool = 'nus' } = Astro.props;
           <div class="input-field">
             <label for="school-select">Scale</label>
             <select id="school-select">
+              <option value="" disabled>-- Select Scale --</option>
               <option value="nus">NUS / NTU (5.0)</option>
               <option value="smu">SMU (4.0)</option>
               <option value="sp">SP / NP / TP (4.0)</option>
@@ -98,7 +99,7 @@ const { initialSchool = 'nus' } = Astro.props;
                 <span class="result-logo">G</span>
                 <span class="result-brand-name">GPACalc</span>
               </div>
-              <span id="result-school-badge" class="result-badge">NUS 5.0</span>
+              <span id="result-school-badge" class="result-badge">GPA</span>
             </div>
 
             <div class="result-main">
@@ -207,11 +208,11 @@ const { initialSchool = 'nus' } = Astro.props;
 <!-- Module Row Template -->
 <template id="module-template">
   <div class="module-row">
-    <input type="text" class="module-name" placeholder="CS1101S" />
-    <select class="module-grade">
+    <input type="text" class="module-name" placeholder="Module name" aria-label="Module name" />
+    <select class="module-grade" aria-label="Module grade">
       <option value="">Grade</option>
     </select>
-    <input type="number" class="module-credits" placeholder="4" min="0" max="20" />
+    <input type="number" class="module-credits" placeholder="4" min="0" max="20" aria-label="Module credits" />
     <button type="button" class="remove-btn" aria-label="Remove">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -234,14 +235,16 @@ const { initialSchool = 'nus' } = Astro.props;
             <p class="export-brand-sub">My GPA Result</p>
           </div>
         </div>
-        <span id="export-school" class="export-school">NUS 5.0</span>
+        <span id="export-school" class="export-school">GPA</span>
       </div>
 
       <div class="export-main">
         <p class="export-label">Projected CGPA</p>
         <p id="export-cgpa" class="export-value">0.00</p>
-        <div id="export-change-wrap" class="export-change">
-          <span id="export-change">+0.00 from current</span>
+        <div class="export-change-row">
+          <div id="export-change-wrap" class="export-change">
+            <span id="export-change">+0.00 from current</span>
+          </div>
         </div>
       </div>
 
@@ -296,8 +299,8 @@ const { initialSchool = 'nus' } = Astro.props;
     um: [
       { grade: 'A+', points: 4.0 }, { grade: 'A', points: 4.0 }, { grade: 'A-', points: 3.67 },
       { grade: 'B+', points: 3.33 }, { grade: 'B', points: 3.0 }, { grade: 'B-', points: 2.67 },
-      { grade: 'C+', points: 2.33 }, { grade: 'C', points: 2.0 }, { grade: 'D', points: 1.0 },
-      { grade: 'F', points: 0.0 }
+      { grade: 'C+', points: 2.33 }, { grade: 'C', points: 2.0 }, { grade: 'C-', points: 1.67 },
+      { grade: 'D+', points: 1.33 }, { grade: 'D', points: 1.0 }, { grade: 'E', points: 0.0 }, { grade: 'F', points: 0.0 }
     ]
   };
 
@@ -311,11 +314,15 @@ const { initialSchool = 'nus' } = Astro.props;
   };
 
   const rootEl = document.querySelector('.gpa-calculator') as HTMLElement;
-  const initialSchool = rootEl?.dataset.initialSchool || 'nus';
+  const initialSchool = rootEl?.dataset.initialSchool || '';
 
-  let currentSchool = initialSchool in gradeScales ? initialSchool : 'nus';
+  let currentSchool = initialSchool && initialSchool in gradeScales ? initialSchool : '';
   let currentTheme = 'light';
   let currentFormat = 'story';
+
+  const MAX_CREDITS_DONE = 400;
+  const MAX_MODULE_CREDITS = 30;
+  const MAX_MODULE_NAME_LENGTH = 24;
 
   // DOM Elements
   const schoolSelect = document.getElementById('school-select') as HTMLSelectElement;
@@ -347,35 +354,94 @@ const { initialSchool = 'nus' } = Astro.props;
   const formatBtns = document.querySelectorAll('.option-btn');
   const themeBtns = document.querySelectorAll('.theme-btn');
   const shareStatus = document.getElementById('share-status');
+  type TrackPayload = Record<string, string | number | boolean>;
+  let hasTrackedCalculatorStart = false;
+
+  function trackEvent(name: string, payload: TrackPayload = {}) {
+    const umami = (window as Window & {
+      umami?: {
+        track?: (eventName: string, eventData?: TrackPayload) => void;
+      };
+    }).umami;
+
+    if (!umami?.track) return;
+    umami.track(name, payload);
+  }
+
+  function trackCalculatorStart(source: string) {
+    if (hasTrackedCalculatorStart) return;
+    hasTrackedCalculatorStart = true;
+    trackEvent('calc_start', { source, school: currentSchool });
+  }
+
+  function getModuleCount() {
+    return document.querySelectorAll('.module-row').length;
+  }
 
   function getScale() {
-    return gradeScales[currentSchool] || gradeScales.nus;
+    return gradeScales[currentSchool] || gradeScales['us-standard'];
+  }
+
+  function getScaleMaxPoints() {
+    return Math.max(...getScale().map((item) => item.points));
+  }
+
+  function readNumber(raw: string | undefined | null) {
+    const value = Number.parseFloat(raw || '0');
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  function clamp(value: number, min: number, max: number) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function sanitizeModuleName(input: string) {
+    return input.replace(/[^\w .-]/g, '').slice(0, MAX_MODULE_NAME_LENGTH);
+  }
+
+  function renderGradeOptions(select: HTMLSelectElement, scale: GradeItem[], selectedValue = '') {
+    const fragment = document.createDocumentFragment();
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = 'Grade';
+    fragment.appendChild(placeholder);
+
+    scale.forEach((item) => {
+      const option = document.createElement('option');
+      option.value = item.points.toString();
+      option.textContent = item.grade;
+      fragment.appendChild(option);
+    });
+
+    select.replaceChildren(fragment);
+    if (selectedValue) {
+      const hasValue = scale.some((item) => item.points.toString() === selectedValue);
+      select.value = hasValue ? selectedValue : '';
+    }
   }
 
   function updateGradeOptions() {
     const scale = getScale();
     document.querySelectorAll('.module-grade').forEach((select) => {
       const gradeSelect = select as HTMLSelectElement;
-      const currentValue = gradeSelect.value;
-      gradeSelect.innerHTML = '<option value="">Grade</option>' +
-        scale.map((item) => `<option value="${item.points}">${item.grade}</option>`).join('');
-      if (currentValue) {
-        const hasValue = scale.some((item) => item.points.toString() === currentValue);
-        gradeSelect.value = hasValue ? currentValue : '';
-      }
+      const currentName = gradeSelect.options[gradeSelect.selectedIndex]?.textContent || '';
+      renderGradeOptions(gradeSelect, scale);
+      const match = scale.find((item) => item.grade === currentName);
+      gradeSelect.value = match ? match.points.toString() : '';
     });
   }
 
   function calculate() {
-    const currentCGPA = parseFloat(currentCGPAInput?.value || '0') || 0;
-    const currentCredits = parseFloat(currentCreditsInput?.value || '0') || 0;
+    const currentCGPA = clamp(readNumber(currentCGPAInput?.value), 0, getScaleMaxPoints());
+    const currentCredits = clamp(readNumber(currentCreditsInput?.value), 0, MAX_CREDITS_DONE);
 
     let semesterPoints = 0;
     let semesterCredits = 0;
+    const maxScalePoint = getScaleMaxPoints();
 
     document.querySelectorAll('.module-row').forEach((row) => {
-      const grade = parseFloat((row.querySelector('.module-grade') as HTMLSelectElement)?.value || '0') || 0;
-      const credits = parseFloat((row.querySelector('.module-credits') as HTMLInputElement)?.value || '0') || 0;
+      const grade = clamp(readNumber((row.querySelector('.module-grade') as HTMLSelectElement)?.value), 0, maxScalePoint);
+      const credits = clamp(readNumber((row.querySelector('.module-credits') as HTMLInputElement)?.value), 0, MAX_MODULE_CREDITS);
       if (credits > 0 && grade > 0) {
         semesterPoints += grade * credits;
         semesterCredits += credits;
@@ -438,19 +504,49 @@ const { initialSchool = 'nus' } = Astro.props;
     const clone = template.content.cloneNode(true) as DocumentFragment;
     const row = clone.querySelector('.module-row') as HTMLElement;
     const gradeSelect = row.querySelector('.module-grade') as HTMLSelectElement;
+    const moduleNameInput = row.querySelector('.module-name') as HTMLInputElement;
+    const moduleCreditsInput = row.querySelector('.module-credits') as HTMLInputElement;
 
     const scale = getScale();
-    gradeSelect.innerHTML = '<option value="">Grade</option>' +
-      scale.map((item) => `<option value="${item.points}">${item.grade}</option>`).join('');
+    renderGradeOptions(gradeSelect, scale);
+    moduleCreditsInput.max = String(MAX_MODULE_CREDITS);
+
+    // Default: Grade=B, Credits=4
+    const bGrade = scale.find((item) => item.grade === 'B');
+    if (bGrade) gradeSelect.value = bGrade.points.toString();
+    moduleCreditsInput.value = '4';
+
+    moduleNameInput?.addEventListener('input', () => {
+      const cleaned = sanitizeModuleName(moduleNameInput.value);
+      if (cleaned !== moduleNameInput.value) {
+        moduleNameInput.value = cleaned;
+      }
+    });
+    moduleCreditsInput?.addEventListener('blur', () => {
+      if (!moduleCreditsInput.value) return;
+      const safeCredits = clamp(readNumber(moduleCreditsInput.value), 0, MAX_MODULE_CREDITS);
+      moduleCreditsInput.value = safeCredits.toString();
+      calculate();
+    });
 
     row.querySelector('.remove-btn')?.addEventListener('click', () => {
+      trackEvent('calc_module_removed', {
+        school: currentSchool,
+        module_count: Math.max(0, getModuleCount() - 1)
+      });
       row.remove();
       calculate();
     });
 
     row.querySelectorAll('input, select').forEach((el) => {
-      el.addEventListener('input', calculate);
-      el.addEventListener('change', calculate);
+      el.addEventListener('input', () => {
+        trackCalculatorStart('module_input');
+        calculate();
+      });
+      el.addEventListener('change', () => {
+        trackCalculatorStart('module_input');
+        calculate();
+      });
     });
 
     modulesList.appendChild(clone);
@@ -493,6 +589,11 @@ const { initialSchool = 'nus' } = Astro.props;
 
   async function handleDownload() {
     try {
+      trackEvent('calc_download_clicked', {
+        school: currentSchool,
+        format: currentFormat,
+        theme: currentTheme
+      });
       setStatus('Generating...');
       const dataUrl = await createCardDataUrl();
       const link = document.createElement('a');
@@ -500,13 +601,29 @@ const { initialSchool = 'nus' } = Astro.props;
       link.download = `gpa-${Date.now()}.png`;
       link.click();
       setStatus('Downloaded!');
+      trackEvent('calc_download_success', {
+        school: currentSchool,
+        format: currentFormat,
+        theme: currentTheme
+      });
     } catch (e) {
       console.error(e);
       setStatus('Error generating image');
+      trackEvent('calc_download_failed', {
+        school: currentSchool,
+        format: currentFormat,
+        theme: currentTheme
+      });
     }
   }
 
   async function handleShare(platform: 'whatsapp' | 'telegram' | 'x' | 'facebook') {
+    trackEvent('calc_share_clicked', {
+      school: currentSchool,
+      platform,
+      format: currentFormat,
+      theme: currentTheme
+    });
     const url = encodeURIComponent(window.location.href);
     const text = encodeURIComponent('Check my GPA result!');
 
@@ -524,6 +641,11 @@ const { initialSchool = 'nus' } = Astro.props;
     try {
       await navigator.clipboard.writeText(window.location.href);
       setStatus('Link copied!');
+      trackEvent('calc_copy_link', {
+        school: currentSchool,
+        format: currentFormat,
+        theme: currentTheme
+      });
     } catch {
       setStatus('Failed to copy');
     }
@@ -537,9 +659,12 @@ const { initialSchool = 'nus' } = Astro.props;
       sp: 'sp', np: 'sp', tp: 'sp', nyp: 'sp', rp: 'sp',
       'us-standard': 'us-standard',
       'india-cgpa': 'india-cgpa',
-      um: 'um', ukm: 'um', usm: 'um', utm: 'um', upm: 'um'
+      um: 'um', ukm: 'um', usm: 'um', utm: 'um', upm: 'um',
+      uitm: 'um', iium: 'um', uum: 'um', ums: 'um', unimas: 'um',
+      upsi: 'um', umt: 'um', uthm: 'um', usim: 'um', umpsa: 'um',
+      unimap: 'um', utem: 'um', unisza: 'um', umk: 'um', upnm: 'um'
     };
-    const mappedSchool = schoolMap[initialSchool] || 'nus';
+    const mappedSchool = initialSchool ? (schoolMap[initialSchool] || '') : '';
     schoolSelect.value = mappedSchool;
     currentSchool = mappedSchool;
 
@@ -547,21 +672,53 @@ const { initialSchool = 'nus' } = Astro.props;
       currentSchool = schoolSelect.value;
       updateGradeOptions();
       calculate();
+      trackEvent('calc_scale_changed', { scale: currentSchool });
     });
   }
 
   [currentCGPAInput, currentCreditsInput].forEach((input) => {
-    input?.addEventListener('input', calculate);
+    input?.addEventListener('input', () => {
+      trackCalculatorStart('base_input');
+      calculate();
+    });
+  });
+  currentCGPAInput?.addEventListener('blur', () => {
+    if (!currentCGPAInput.value) return;
+    const safeCGPA = clamp(readNumber(currentCGPAInput.value), 0, getScaleMaxPoints());
+    currentCGPAInput.value = safeCGPA.toString();
+    calculate();
+  });
+  currentCreditsInput?.addEventListener('blur', () => {
+    if (!currentCreditsInput.value) return;
+    const safeCredits = clamp(readNumber(currentCreditsInput.value), 0, MAX_CREDITS_DONE);
+    currentCreditsInput.value = safeCredits.toString();
+    calculate();
   });
 
-  addBtn?.addEventListener('click', addModule);
-  clearBtn?.addEventListener('click', clearModules);
+  addBtn?.addEventListener('click', () => {
+    trackCalculatorStart('add_module');
+    addModule();
+    trackEvent('calc_module_added', {
+      school: currentSchool,
+      module_count: getModuleCount()
+    });
+  });
+  clearBtn?.addEventListener('click', () => {
+    const beforeCount = getModuleCount();
+    clearModules();
+    trackEvent('calc_modules_cleared', {
+      school: currentSchool,
+      before_count: beforeCount,
+      after_count: getModuleCount()
+    });
+  });
 
   formatBtns.forEach((btn) => {
     btn.addEventListener('click', () => {
       currentFormat = (btn as HTMLElement).dataset.format || 'story';
       formatBtns.forEach((b) => b.classList.toggle('active', b === btn));
       syncExportCard();
+      trackEvent('calc_share_format_changed', { format: currentFormat });
     });
   });
 
@@ -570,6 +727,7 @@ const { initialSchool = 'nus' } = Astro.props;
       currentTheme = (btn as HTMLElement).dataset.theme || 'light';
       themeBtns.forEach((b) => b.classList.toggle('active', b === btn));
       syncExportCard();
+      trackEvent('calc_share_theme_changed', { theme: currentTheme });
     });
   });
 
@@ -587,8 +745,8 @@ const { initialSchool = 'nus' } = Astro.props;
 
 <style>
   .gpa-calculator {
-    --c-primary: #10b981;
-    --c-primary-dark: #059669;
+    --c-primary: #047857;
+    --c-primary-dark: #065f46;
     --c-accent: #f97316;
     --c-bg: #fafaf9;
     --c-surface: #ffffff;
@@ -1014,14 +1172,15 @@ const { initialSchool = 'nus' } = Astro.props;
   .result-logo {
     width: 32px;
     height: 32px;
-    border-radius: 8px;
-    background: var(--c-primary);
+    border-radius: 999px;
+    background: #0b8c64;
     color: white;
     font-size: 16px;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 2px 3px 0 #1c1917;
   }
 
   .result-brand-name {
@@ -1043,6 +1202,10 @@ const { initialSchool = 'nus' } = Astro.props;
   .result-main {
     text-align: center;
     padding: 12px 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
   }
 
   .result-label {
@@ -1051,7 +1214,7 @@ const { initialSchool = 'nus' } = Astro.props;
     color: var(--c-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    margin: 0 0 4px;
+    margin: 0;
   }
 
   .result-value {
@@ -1060,7 +1223,9 @@ const { initialSchool = 'nus' } = Astro.props;
     color: var(--c-text);
     line-height: 1;
     margin: 0;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
   }
 
   .result-change {
@@ -1069,7 +1234,9 @@ const { initialSchool = 'nus' } = Astro.props;
     border-radius: 20px;
     font-size: 13px;
     font-weight: 600;
-    margin-top: 12px;
+    margin-top: 0;
+    line-height: 1;
+    white-space: nowrap;
   }
 
   .result-change.positive {
@@ -1109,6 +1276,8 @@ const { initialSchool = 'nus' } = Astro.props;
     font-size: 20px;
     font-weight: 700;
     color: var(--c-text);
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
   }
 
   .result-footer {
@@ -1234,21 +1403,21 @@ const { initialSchool = 'nus' } = Astro.props;
   }
 
   .share-btn-whatsapp {
-    background: rgba(37, 211, 102, 0.1);
-    color: #25d366;
+    background: #dcfce7;
+    color: #166534;
   }
 
   .share-btn-whatsapp:hover {
-    background: rgba(37, 211, 102, 0.2);
+    background: #bbf7d0;
   }
 
   .share-btn-telegram {
-    background: rgba(0, 136, 204, 0.1);
-    color: #0088cc;
+    background: #dbeafe;
+    color: #1d4ed8;
   }
 
   .share-btn-telegram:hover {
-    background: rgba(0, 136, 204, 0.2);
+    background: #bfdbfe;
   }
 
   .share-btn-x {
@@ -1261,12 +1430,12 @@ const { initialSchool = 'nus' } = Astro.props;
   }
 
   .share-btn-facebook {
-    background: rgba(24, 119, 242, 0.1);
-    color: #1877f2;
+    background: #dbeafe;
+    color: #1e40af;
   }
 
   .share-btn-facebook:hover {
-    background: rgba(24, 119, 242, 0.2);
+    background: #bfdbfe;
   }
 
   .share-btn-copy {
@@ -1305,7 +1474,7 @@ const { initialSchool = 'nus' } = Astro.props;
   .export-card {
     width: 1080px;
     height: 1920px;
-    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-family: "Avenir Next", "SF Pro Display", "Segoe UI", system-ui, sans-serif;
     position: relative;
     overflow: hidden;
 
@@ -1367,14 +1536,15 @@ const { initialSchool = 'nus' } = Astro.props;
   .export-logo {
     width: 72px;
     height: 72px;
-    border-radius: 18px;
-    background: var(--export-primary);
+    border-radius: 999px;
+    background: #0b8c64;
     color: white;
     font-size: 40px;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 4px 4px 0 #1c1917;
   }
 
   .export-brand-name {
@@ -1407,6 +1577,7 @@ const { initialSchool = 'nus' } = Astro.props;
     align-items: center;
     justify-content: center;
     text-align: center;
+    gap: 16px;
   }
 
   .export-label {
@@ -1419,27 +1590,56 @@ const { initialSchool = 'nus' } = Astro.props;
   }
 
   .export-value {
-    font-size: 280px;
+    font-size: 260px;
     font-weight: 800;
     color: var(--export-text);
     line-height: 1;
     margin: 0;
     letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    white-space: nowrap;
   }
 
   .export-card[data-format="square"] .export-value {
-    font-size: 200px;
+    font-size: 184px;
+  }
+
+  .export-card[data-format="square"] .export-main {
+    gap: 18px;
+  }
+
+  .export-change-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60px;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .export-card[data-format="square"] .export-change-row {
+    min-height: 48px;
   }
 
   .export-change {
     display: inline-flex;
-    padding: 16px 32px;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 26px;
     border-radius: 999px;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 700;
-    margin-top: 20px;
-    background: rgba(16, 185, 129, 0.15);
-    color: #6ee7b7;
+    margin-top: 0;
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .export-card[data-format="square"] .export-change {
+    font-size: 20px;
+    padding: 12px 22px;
   }
 
   .export-change.negative {
@@ -1458,7 +1658,7 @@ const { initialSchool = 'nus' } = Astro.props;
   .export-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 20px;
     margin-top: auto;
   }
 
@@ -1482,6 +1682,8 @@ const { initialSchool = 'nus' } = Astro.props;
     font-weight: 800;
     color: var(--export-text);
     margin: 0;
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
   }
 
   .export-footer {

@@ -5,7 +5,8 @@ import FAQ from '../components/FAQ.astro';
 import AdUnit from '../components/AdUnit.astro';
 
 const title = 'Cumulative GPA Calculator - Free Online Tool';
-const description = 'Free cumulative GPA calculator for college students. Calculate your projected CGPA with our easy-to-use tool. Supports NUS, NTU, SMU and more.';
+const description = 'Free cumulative GPA calculator for college students. Calculate your projected CGPA with our easy-to-use tool. Supports 4.0, 5.0 and 10.0 grading scales.';
+const canonical = 'https://gpacalc.app/';
 
 const schema = {
   '@context': 'https://schema.org',
@@ -31,8 +32,8 @@ const faqs = [
     answer: 'Use this formula: <strong>New CGPA = (Current CGPA × Current Credits + Semester Grade Points) ÷ (Current Credits + Semester Credits)</strong>. The calculator handles this automatically for every scale.'
   },
   {
-    question: 'Does this calculator support NUS, NTU, SMU, SP and NP?',
-    answer: 'Yes. It supports major Singapore university and polytechnic scales, plus India CGPA and US/Malaysia 4.0 systems.'
+    question: 'Which grading scales does this calculator support?',
+    answer: 'It supports Singapore university (5.0) and polytechnic (4.0) scales, Malaysia (4.0), India CGPA (10.0), and US standard (4.0).'
   },
   {
     question: 'What is the difference between GPA and CGPA?',
@@ -49,7 +50,7 @@ const faqs = [
 ];
 ---
 
-<ToolLayout title={title} description={description} schema={schema} faqs={faqs}>
+<ToolLayout title={title} description={description} canonical={canonical} schema={schema} faqs={faqs}>
   <!-- Hero Section -->
   <section class="mb-6">
     <div class="flex items-center gap-2 mb-3">
@@ -76,7 +77,7 @@ const faqs = [
     <GPACalculator />
   </section>
 
-  <AdUnit slot="in-content" />
+  <AdUnit placement="in-content" />
 
   <!-- Info Sections -->
   <section class="mb-10">
@@ -175,27 +176,27 @@ const faqs = [
           </thead>
           <tbody class="divide-y divide-stone-100 font-medium text-stone-900">
             <tr>
-              <td class="px-4 py-3">CS1101S</td>
-              <td class="px-4 py-3 text-emerald-600">5.0 (A)</td>
-              <td class="px-4 py-3 text-center">4</td>
-              <td class="px-4 py-3 text-right">20.0</td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3">MA1521</td>
-              <td class="px-4 py-3 text-emerald-600">4.0 (B+)</td>
+              <td class="px-4 py-3">Module A</td>
+              <td class="px-4 py-3 text-emerald-600">4.0 (A)</td>
               <td class="px-4 py-3 text-center">4</td>
               <td class="px-4 py-3 text-right">16.0</td>
             </tr>
             <tr>
-              <td class="px-4 py-3">GEA1000</td>
-              <td class="px-4 py-3 text-emerald-600">4.5 (A-)</td>
+              <td class="px-4 py-3">Module B</td>
+              <td class="px-4 py-3 text-emerald-600">3.3 (B+)</td>
+              <td class="px-4 py-3 text-center">3</td>
+              <td class="px-4 py-3 text-right">9.9</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-3">Module C</td>
+              <td class="px-4 py-3 text-emerald-600">3.7 (A-)</td>
               <td class="px-4 py-3 text-center">4</td>
-              <td class="px-4 py-3 text-right">18.0</td>
+              <td class="px-4 py-3 text-right">14.8</td>
             </tr>
             <tr class="bg-orange-50/50 text-lg">
               <td class="px-4 py-3 font-bold" colspan="2">Total</td>
-              <td class="px-4 py-3 text-center font-bold">12</td>
-              <td class="px-4 py-3 text-right font-extrabold text-orange-600">54.0</td>
+              <td class="px-4 py-3 text-center font-bold">11</td>
+              <td class="px-4 py-3 text-right font-extrabold text-orange-600">40.7</td>
             </tr>
           </tbody>
         </table>
@@ -203,7 +204,60 @@ const faqs = [
     </div>
   </section>
 
-  <AdUnit slot="in-content" />
-
   <FAQ items={faqs} />
+
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">Why Trust GPACalc</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <a href="/about/" class="bg-white border border-stone-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
+        <p class="font-bold text-stone-900">About</p>
+        <p class="text-sm text-stone-500 mt-1">Who maintains the product.</p>
+      </a>
+      <a href="/methodology/" class="bg-white border border-stone-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
+        <p class="font-bold text-stone-900">Methodology</p>
+        <p class="text-sm text-stone-500 mt-1">Formula and scale logic.</p>
+      </a>
+      <a href="/editorial-policy/" class="bg-white border border-stone-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
+        <p class="font-bold text-stone-900">Editorial Policy</p>
+        <p class="text-sm text-stone-500 mt-1">Review and correction rules.</p>
+      </a>
+      <a href="/contact/" class="bg-white border border-stone-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
+        <p class="font-bold text-stone-900">Contact</p>
+        <p class="text-sm text-stone-500 mt-1">Official support channels.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="mt-8 flex flex-wrap items-center justify-center gap-4">
+    <a href="https://toolfame.com/item/gpacalc" target="_blank" rel="noopener noreferrer">
+      <img
+        src="https://toolfame.com/badge-light.svg"
+        alt="Featured on toolfame.com"
+        width="210"
+        height="54"
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+    <a href="https://fazier.com/launches/gpacalc.app" target="_blank" rel="noopener noreferrer">
+      <img
+        src="https://fazier.com/api/v1/public/badges/launch_badges.svg?badge_type=launched&theme=light"
+        width="120"
+        height="36"
+        alt="Fazier badge"
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+    <a href="https://startupfa.me/s/gpacalc?utm_source=gpacalc.app" target="_blank" rel="noopener noreferrer">
+      <img
+        src="https://startupfa.me/badges/featured-badge-small.webp"
+        alt="GPACalc - Featured on Startup Fame"
+        width="224"
+        height="36"
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+  </section>
 </ToolLayout>
