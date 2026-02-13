@@ -1,0 +1,87 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+
+const title = 'About GPACalc';
+const description = 'Learn who builds GPACalc, what the product covers, and how we maintain quality for GPA and CGPA calculations.';
+const canonical = 'https://gpacalc.app/about/';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: title,
+  description,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'GPACalc',
+    url: 'https://gpacalc.app/'
+  }
+};
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} schema={schema}>
+  <section class="mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-3 tracking-tight">About GPACalc</h1>
+    <p class="text-lg text-stone-500 font-medium max-w-3xl">
+      GPACalc is a free academic planning tool for students who need fast and transparent GPA estimates across different grading systems.
+    </p>
+  </section>
+
+  <section class="grid gap-5 mb-10 md:grid-cols-2">
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Experience</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-3">Built by a maker, maintained in public</h2>
+      <p class="text-stone-600 leading-relaxed">
+        GPACalc is maintained by Yida and iterated through real user feedback, feature requests, and bug reports. Product updates and issue handling are transparent through the public repository.
+      </p>
+    </div>
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Scope</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-3">What GPACalc does and does not do</h2>
+      <p class="text-stone-600 leading-relaxed">
+        GPACalc provides estimation and planning support for GPA, CGPA, and percentage conversion. It is not an official transcript service and does not replace school-issued grade policies.
+      </p>
+    </div>
+  </section>
+
+  <section class="mb-10">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">Trust Center</h2>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <a href="/methodology/" class="bg-white border border-stone-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
+        <p class="font-bold text-stone-900">Methodology</p>
+        <p class="text-sm text-stone-500 mt-1">How formulas and scales are applied.</p>
+      </a>
+      <a href="/editorial-policy/" class="bg-white border border-stone-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
+        <p class="font-bold text-stone-900">Editorial Policy</p>
+        <p class="text-sm text-stone-500 mt-1">How we review, correct, and update content.</p>
+      </a>
+      <a href="/privacy/" class="bg-white border border-stone-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
+        <p class="font-bold text-stone-900">Privacy Policy</p>
+        <p class="text-sm text-stone-500 mt-1">What data we collect and why.</p>
+      </a>
+      <a href="/terms/" class="bg-white border border-stone-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
+        <p class="font-bold text-stone-900">Terms of Use</p>
+        <p class="text-sm text-stone-500 mt-1">Usage conditions and limitations.</p>
+      </a>
+      <a href="/contact/" class="bg-white border border-stone-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
+        <p class="font-bold text-stone-900">Contact</p>
+        <p class="text-sm text-stone-500 mt-1">Report issues or request updates.</p>
+      </a>
+      <a href="/schools/" class="bg-white border border-stone-200 rounded-xl p-4 hover:border-emerald-400 transition-colors">
+        <p class="font-bold text-stone-900">School Calculators</p>
+        <p class="text-sm text-stone-500 mt-1">School-specific GPA tools.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="mb-10 bg-white border border-stone-200 rounded-2xl p-6">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">Public Profiles</h2>
+    <div class="flex flex-wrap items-center gap-3">
+      <a href="https://x.com/yidabuilds" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-xl border border-stone-200 px-4 py-2 text-sm font-semibold text-stone-700 hover:border-emerald-400 hover:text-emerald-700 transition-colors">
+        X @yidabuilds
+      </a>
+      <a href="https://github.com/Yida-Dev/gpa-calculator" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-xl border border-stone-200 px-4 py-2 text-sm font-semibold text-stone-700 hover:border-emerald-400 hover:text-emerald-700 transition-colors">
+        GitHub Repository
+      </a>
+    </div>
+  </section>
+</ToolLayout>

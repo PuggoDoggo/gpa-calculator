@@ -1,0 +1,77 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+
+const title = 'Privacy Policy';
+const description = 'Privacy policy for GPACalc, including analytics, advertising, and data handling practices.';
+const canonical = 'https://gpacalc.app/privacy/';
+const effectiveDate = 'February 13, 2026';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'PrivacyPolicy',
+  name: title,
+  description
+};
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} schema={schema}>
+  <section class="mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-3 tracking-tight">Privacy Policy</h1>
+    <p class="text-lg text-stone-500 font-medium max-w-3xl">
+      This policy explains what information GPACalc processes and how it is used.
+    </p>
+    <p class="text-sm text-stone-400 mt-3">Effective date: {effectiveDate}</p>
+  </section>
+
+  <section class="mb-10 space-y-5">
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">1. Data we process</h2>
+      <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+        <li>Input values you type into calculators (processed in browser session for computation).</li>
+        <li>Basic usage analytics events to measure feature usage and site performance.</li>
+        <li>Standard technical request metadata such as IP-derived network logs managed by hosting and analytics providers.</li>
+      </ul>
+    </div>
+
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">2. Analytics and advertising</h2>
+      <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+        <li>GPACalc uses Umami through a first-party proxy path for aggregate site analytics.</li>
+        <li>GPACalc may display Google AdSense ads, which may use cookies and related technologies according to Google policies.</li>
+      </ul>
+    </div>
+
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">3. Purpose of processing</h2>
+      <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+        <li>Provide calculator functionality and accurate output.</li>
+        <li>Improve reliability, UX, and feature quality.</li>
+        <li>Support sustainable operation through advertising.</li>
+      </ul>
+    </div>
+
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">4. Third-party services</h2>
+      <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+        <li>Cloudflare Pages (hosting and delivery)</li>
+        <li>Umami (analytics)</li>
+        <li>Google AdSense (ads)</li>
+      </ul>
+    </div>
+
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">5. Contact and requests</h2>
+      <p class="text-stone-600 leading-relaxed mb-3">
+        For privacy-related questions, contact through the official channels below.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="https://x.com/yidabuilds" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-xl border border-stone-200 px-4 py-2 text-sm font-semibold text-stone-700 hover:border-emerald-400 hover:text-emerald-700 transition-colors">
+          X @yidabuilds
+        </a>
+        <a href="https://github.com/Yida-Dev/gpa-calculator/issues" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-xl border border-stone-200 px-4 py-2 text-sm font-semibold text-stone-700 hover:border-emerald-400 hover:text-emerald-700 transition-colors">
+          GitHub Issues
+        </a>
+      </div>
+    </div>
+  </section>
+</ToolLayout>

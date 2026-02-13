@@ -1,0 +1,13 @@
+---
+const websiteId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
+const enabled = import.meta.env.PUBLIC_UMAMI_ENABLED !== 'false' && Boolean(websiteId);
+---
+
+{enabled && (
+  <script
+    defer
+    src="/a/s.js"
+    data-website-id={websiteId}
+    data-host-url="/a"
+  ></script>
+)}

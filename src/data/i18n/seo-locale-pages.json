@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-02-13",
+  "requiredRoutes": ["home", "gpa-to-percentage", "percentage-to-gpa"],
+  "locales": {
+    "en-sg": {
+      "pathPrefix": "/en-sg",
+      "blockedTerms": ["ipk calculator", "pngk calculator"],
+      "pages": {
+        "home": {
+          "canonicalPath": "/en-sg/",
+          "title": "Cumulative GPA Calculator Singapore | GPACalc",
+          "h1": "Cumulative GPA Calculator for Singapore Students",
+          "description": "Free GPA calculator for Singapore universities and polytechnics. Project cumulative GPA and semester GPA with school-specific scales.",
+          "primaryKeyword": "gpa calculator singapore",
+          "secondaryKeywords": ["cumulative gpa calculator", "nus gpa calculator", "ntu gpa calculator"]
+        },
+        "gpa-to-percentage": {
+          "canonicalPath": "/en-sg/gpa-to-percentage/",
+          "title": "GPA to Percentage Converter Singapore | GPACalc",
+          "h1": "GPA to Percentage Singapore Converter for Students",
+          "description": "Use this GPA to percentage Singapore tool for 4.0 and 5.0 scales used in local universities and polytechnics.",
+          "primaryKeyword": "gpa to percentage singapore",
+          "secondaryKeywords": ["gpa converter singapore", "cap to percentage", "cgpa to percentage singapore"]
+        },
+        "percentage-to-gpa": {
+          "canonicalPath": "/en-sg/percentage-to-gpa/",
+          "title": "Percentage to GPA Converter Singapore | GPACalc",
+          "h1": "Percentage to GPA Singapore Converter for Students",
+          "description": "Use this percentage to GPA Singapore tool to estimate GPA from percentage scores on 4.0 and 5.0 scales.",
+          "primaryKeyword": "percentage to gpa singapore",
+          "secondaryKeywords": ["convert percentage to gpa", "gpa estimate singapore", "cap conversion singapore"]
+        }
+      }
+    },
+    "en-my": {
+      "pathPrefix": "/en-my",
+      "blockedTerms": ["ipk calculator"],
+      "pages": {
+        "home": {
+          "canonicalPath": "/en-my/",
+          "title": "CGPA Calculator Malaysia | GPACalc",
+          "h1": "CGPA Calculator for Malaysia Students",
+          "description": "Free Malaysia CGPA calculator for university students. Calculate semester GPA and cumulative CGPA on common local grading scales.",
+          "primaryKeyword": "cgpa calculator malaysia",
+          "secondaryKeywords": ["gpa calculator malaysia", "malaysia university cgpa", "cgpa checker malaysia"]
+        },
+        "gpa-to-percentage": {
+          "canonicalPath": "/en-my/gpa-to-percentage/",
+          "title": "CGPA to Percentage Malaysia Converter | GPACalc",
+          "h1": "CGPA to Percentage Converter for Malaysia",
+          "description": "Convert CGPA or GPA into percentage estimates for Malaysian university applications and scholarship planning.",
+          "primaryKeyword": "cgpa to percentage malaysia",
+          "secondaryKeywords": ["gpa to percentage malaysia", "cgpa conversion malaysia", "malaysia cgpa calculator"]
+        },
+        "percentage-to-gpa": {
+          "canonicalPath": "/en-my/percentage-to-gpa/",
+          "title": "Percentage to CGPA Malaysia Converter | GPACalc",
+          "h1": "Percentage to CGPA Converter for Malaysia",
+          "description": "Convert percentage marks into GPA or CGPA estimates based on common Malaysian grading scales.",
+          "primaryKeyword": "percentage to cgpa malaysia",
+          "secondaryKeywords": ["percentage to gpa malaysia", "cgpa estimate malaysia", "gpa conversion malaysia"]
+        }
+      }
+    },
+    "ms-my": {
+      "pathPrefix": "/ms-my",
+      "blockedTerms": ["cumulative gpa calculator"],
+      "pages": {
+        "home": {
+          "canonicalPath": "/ms-my/",
+          "title": "Kalkulator PNGK Malaysia | GPACalc",
+          "h1": "Kalkulator PNGK untuk Pelajar Malaysia",
+          "description": "Kira PNGK dan GPA semester dengan pantas untuk universiti di Malaysia menggunakan skala gred tempatan.",
+          "primaryKeyword": "kalkulator pngk",
+          "secondaryKeywords": ["pengiraan pngk", "purata nilai gred kumulatif", "kalkulator cgpa malaysia"]
+        },
+        "gpa-to-percentage": {
+          "canonicalPath": "/ms-my/gpa-to-percentage/",
+          "title": "Penukar PNGK ke Peratus Malaysia | GPACalc",
+          "h1": "Penukar PNGK ke Peratus untuk Malaysia",
+          "description": "Tukar PNGK atau GPA kepada anggaran peratus untuk semakan akademik dan permohonan biasiswa di Malaysia.",
+          "primaryKeyword": "pngk ke peratus",
+          "secondaryKeywords": ["kalkulator peratus pngk", "cgpa ke peratus malaysia", "penukaran pngk"]
+        },
+        "percentage-to-gpa": {
+          "canonicalPath": "/ms-my/percentage-to-gpa/",
+          "title": "Penukar Peratus ke PNGK Malaysia | GPACalc",
+          "h1": "Penukar Peratus ke PNGK untuk Malaysia",
+          "description": "Tukar markah peratus kepada anggaran PNGK atau GPA berdasarkan skala gred yang biasa digunakan di Malaysia.",
+          "primaryKeyword": "peratus ke pngk",
+          "secondaryKeywords": ["peratus ke gpa malaysia", "kalkulator pngk malaysia", "anggaran purata nilai gred"]
+        }
+      }
+    },
+    "en-in": {
+      "pathPrefix": "/en-in",
+      "blockedTerms": ["pngk calculator", "ipk calculator"],
+      "pages": {
+        "home": {
+          "canonicalPath": "/en-in/",
+          "title": "CGPA Calculator India (10 Point Scale) | GPACalc",
+          "h1": "CGPA Calculator for India Students",
+          "description": "Calculate CGPA, SGPA, and projected cumulative GPA on 10-point and 4-point grading scales used in India.",
+          "primaryKeyword": "cgpa calculator india",
+          "secondaryKeywords": ["sgpa to cgpa", "10 point cgpa calculator", "cgpa calculator"]
+        },
+        "gpa-to-percentage": {
+          "canonicalPath": "/en-in/gpa-to-percentage/",
+          "title": "CGPA to Percentage Converter India | GPACalc",
+          "h1": "CGPA to Percentage Converter for India",
+          "description": "Convert CGPA to percentage for India universities. Includes common formulas used for 10-point CGPA systems.",
+          "primaryKeyword": "cgpa to percentage india",
+          "secondaryKeywords": ["cgpa percentage calculator", "sgpa to percentage", "10 point cgpa to percentage"]
+        },
+        "percentage-to-gpa": {
+          "canonicalPath": "/en-in/percentage-to-gpa/",
+          "title": "Percentage to CGPA Converter India | GPACalc",
+          "h1": "Percentage to CGPA Converter for India",
+          "description": "Convert percentage marks to CGPA or GPA estimates for common India grading systems and planning scenarios.",
+          "primaryKeyword": "percentage to cgpa india",
+          "secondaryKeywords": ["percentage to gpa india", "marks to cgpa", "cgpa estimate india"]
+        }
+      }
+    }
+  }
+}

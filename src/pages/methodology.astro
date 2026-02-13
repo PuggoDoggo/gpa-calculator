@@ -1,0 +1,74 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+
+const title = 'Methodology';
+const description = 'How GPACalc computes GPA, CGPA, and percentage conversions, plus data source rules and known limitations.';
+const canonical = 'https://gpacalc.app/methodology/';
+const lastReviewed = 'February 13, 2026';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description
+};
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} schema={schema}>
+  <section class="mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-3 tracking-tight">Methodology</h1>
+    <p class="text-lg text-stone-500 font-medium max-w-3xl">
+      This page explains the exact logic used by GPACalc so users can verify assumptions before relying on results.
+    </p>
+    <p class="text-sm text-stone-400 mt-3">Last reviewed: {lastReviewed}</p>
+  </section>
+
+  <section class="mb-10 bg-white border border-stone-200 rounded-2xl p-6">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">Core Formula for CGPA Projection</h2>
+    <div class="bg-stone-900 text-stone-100 rounded-xl p-4 font-mono text-sm overflow-x-auto mb-4">
+      New CGPA = (Current CGPA x Current Credits + Semester Grade Points) / (Current Credits + Semester Credits)
+    </div>
+    <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+      <li>Semester Grade Points = Sum of (grade point x module credit) for all modules entered.</li>
+      <li>Each grade point comes from the selected grading scale.</li>
+      <li>Results are estimates for planning and may differ from institution-specific rounding rules.</li>
+    </ul>
+  </section>
+
+  <section class="mb-10 grid gap-5 md:grid-cols-2">
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">GPA to Percentage</h2>
+      <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+        <li>4.0 scale baseline: Percentage = GPA x 25</li>
+        <li>5.0 scale baseline: Percentage = GPA x 20</li>
+        <li>10.0 scale baseline: Percentage = GPA x 9.5</li>
+      </ul>
+    </div>
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">Percentage to GPA</h2>
+      <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+        <li>Linear estimate: GPA = (Percentage / 100) x Scale</li>
+        <li>Supports 4.0, 5.0, and 10.0 scales.</li>
+        <li>Some schools use band-based conversion, so official policy overrides this estimate.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mb-10 bg-white border border-stone-200 rounded-2xl p-6">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">Scale and Source Rules</h2>
+    <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+      <li>School-grade mappings are maintained from publicly available institution grading references.</li>
+      <li>When official school documentation conflicts with a generic formula, school policy is treated as authoritative.</li>
+      <li>We periodically review school mappings and adjust when policies change.</li>
+    </ul>
+  </section>
+
+  <section class="mb-10 bg-orange-50 border border-orange-200 rounded-2xl p-6">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">Limitations</h2>
+    <ul class="list-disc pl-6 text-stone-700 leading-relaxed space-y-2">
+      <li>GPACalc does not issue official grades or transcripts.</li>
+      <li>Institution-specific exceptional rules are not always captured in generic calculators.</li>
+      <li>Use GPACalc for planning, then verify with your school handbook or registrar for official decisions.</li>
+    </ul>
+  </section>
+</ToolLayout>

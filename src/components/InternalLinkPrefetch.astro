@@ -1,0 +1,76 @@
+---
+interface Props {
+  maxLinks?: number;
+}
+
+const { maxLinks = 8 } = Astro.props;
+---
+
+<script is:inline define:vars={{ maxLinks }}>
+  (() => {
+    if (window.__gpacalcPrefetchInit) return;
+    window.__gpacalcPrefetchInit = true;
+
+    const connection =
+      navigator.connection ||
+      navigator.mozConnection ||
+      navigator.webkitConnection;
+    const effectiveType = connection?.effectiveType || '';
+    const dataSaverEnabled = Boolean(connection?.saveData);
+    const slowNetwork = /(^|-)2g$/.test(effectiveType) || /(^|-)3g$/.test(effectiveType);
+    if (dataSaverEnabled || slowNetwork) return;
+
+    const prefetched = new Set();
+    let budget = maxLinks;
+
+    const toUrl = (href) => {
+      try {
+        return new URL(href, window.location.href);
+      } catch {
+        return null;
+      }
+    };
+
+    const canPrefetch = (url) => {
+      if (!url) return false;
+      if (url.origin !== window.location.origin) return false;
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') return false;
+      if (url.pathname.startsWith('/cdn-cgi/')) return false;
+      if (url.pathname === window.location.pathname && url.search === window.location.search) return false;
+      return true;
+    };
+
+    const prefetchHref = (href) => {
+      if (!href || budget <= 0 || prefetched.has(href)) return;
+      prefetched.add(href);
+      budget -= 1;
+
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.as = 'document';
+      link.href = href;
+      document.head.appendChild(link);
+    };
+
+    const prefetchAnchor = (anchor) => {
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+      const href = anchor.getAttribute('href');
+      if (!href || href.startsWith('#')) return;
+      const url = toUrl(href);
+      if (!canPrefetch(url)) return;
+      prefetchHref(url.href);
+    };
+
+    const interactionHandler = (event) => {
+      if (document.visibilityState !== 'visible') return;
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const anchor = target.closest('a[href]');
+      if (anchor) prefetchAnchor(anchor);
+    };
+
+    document.addEventListener('pointerover', interactionHandler, { passive: true, capture: true });
+    document.addEventListener('touchstart', interactionHandler, { passive: true, capture: true });
+    document.addEventListener('focusin', interactionHandler, { passive: true, capture: true });
+  })();
+</script>

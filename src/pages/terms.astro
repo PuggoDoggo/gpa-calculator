@@ -1,0 +1,63 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+
+const title = 'Terms of Use';
+const description = 'Terms for using GPACalc, including acceptable use, limitations, and disclaimers.';
+const canonical = 'https://gpacalc.app/terms/';
+const effectiveDate = 'February 13, 2026';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description
+};
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} schema={schema}>
+  <section class="mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-3 tracking-tight">Terms of Use</h1>
+    <p class="text-lg text-stone-500 font-medium max-w-3xl">
+      By using GPACalc, you agree to these terms.
+    </p>
+    <p class="text-sm text-stone-400 mt-3">Effective date: {effectiveDate}</p>
+  </section>
+
+  <section class="mb-10 space-y-5">
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">1. Service purpose</h2>
+      <p class="text-stone-600 leading-relaxed">
+        GPACalc provides educational planning tools for GPA and CGPA estimation. Outputs are informational and not official academic records.
+      </p>
+    </div>
+
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">2. User responsibility</h2>
+      <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+        <li>You are responsible for validating final requirements with your institution.</li>
+        <li>You must not use the site for abusive, illegal, or disruptive activity.</li>
+      </ul>
+    </div>
+
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">3. Availability</h2>
+      <p class="text-stone-600 leading-relaxed">
+        We aim for reliable access but do not guarantee uninterrupted service. Features may change over time.
+      </p>
+    </div>
+
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">4. Limitation of liability</h2>
+      <p class="text-stone-600 leading-relaxed">
+        GPACalc is provided on an as-is basis. We are not liable for decisions made solely based on calculator output.
+      </p>
+    </div>
+
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <h2 class="text-xl font-bold text-stone-900 mb-3">5. Contact</h2>
+      <p class="text-stone-600 leading-relaxed">
+        For questions about these terms, contact us via <a href="/contact/" class="text-emerald-700 font-semibold hover:underline">the contact page</a>.
+      </p>
+    </div>
+  </section>
+</ToolLayout>

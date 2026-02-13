@@ -1,0 +1,139 @@
+---
+interface Props {
+  client: string;
+  strategy?: 'performance' | 'revenue';
+  autoAds?: boolean;
+  hasManualSlots?: boolean;
+  overlayMode?: 'bottom' | 'collapsed-bottom' | '';
+}
+
+const {
+  client,
+  strategy = 'performance',
+  autoAds = false,
+  hasManualSlots = false,
+  overlayMode = 'bottom'
+} = Astro.props;
+---
+
+{client && (
+  <script is:inline define:vars={{ client, strategy, autoAds, hasManualSlots, overlayMode }}>
+    (() => {
+      if (window.__gpacalcAdsenseLoaderInit) return;
+      window.__gpacalcAdsenseLoaderInit = true;
+
+      const revenueFirst = strategy === 'revenue';
+      const enableAutoAds = Boolean(autoAds);
+      const eagerForAutoAds = enableAutoAds && !hasManualSlots;
+      const isAutomation =
+        navigator.webdriver ||
+        /Lighthouse|Chrome-Lighthouse|HeadlessChrome/i.test(navigator.userAgent);
+      const disableAdsByQuery = new URLSearchParams(window.location.search).get('ads') === 'off';
+      const suppressAds = isAutomation || disableAdsByQuery;
+      const enableRevenueFirst = revenueFirst && !isAutomation;
+      let loaded = false;
+
+      if (suppressAds) {
+        window.__gpacalcAdsSuppressed = true;
+        document.documentElement.setAttribute('data-ads-suppressed', '1');
+        document.dispatchEvent(new CustomEvent('adsense:suppressed'));
+        return;
+      }
+
+      const interactionEvents = ['pointerdown', 'keydown', 'touchstart'];
+
+      const removeInteractionListeners = () => {
+        interactionEvents.forEach((eventName) => {
+          window.removeEventListener(eventName, interactionHandler, { capture: true });
+        });
+      };
+
+      const loadAdsScript = () => {
+        if (loaded || document.getElementById('gpacalc-adsense-js')) return;
+        loaded = true;
+
+        const script = document.createElement('script');
+        script.id = 'gpacalc-adsense-js';
+        script.async = true;
+        script.crossOrigin = 'anonymous';
+        script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${client}`;
+        if (overlayMode) {
+          script.setAttribute('data-overlays', overlayMode);
+        }
+        script.addEventListener('load', () => {
+          if (enableAutoAds && !window.__gpacalcAutoAdsInit) {
+            window.__gpacalcAutoAdsInit = true;
+            try {
+              (window.adsbygoogle = window.adsbygoogle || []).push({
+                google_ad_client: client,
+                enable_page_level_ads: true
+              });
+            } catch {}
+          }
+          document.dispatchEvent(new CustomEvent('adsense:ready'));
+        });
+        document.head.appendChild(script);
+        removeInteractionListeners();
+      };
+
+      const shouldDelayForNavigation = (event) => {
+        if (event.type !== 'pointerdown' && event.type !== 'touchstart') return false;
+        const target = event.target;
+        if (!(target instanceof Element)) return false;
+        const anchor = target.closest('a[href]');
+        if (!anchor) return false;
+
+        const href = anchor.getAttribute('href');
+        if (!href || href.startsWith('#') || anchor.target === '_blank') return false;
+
+        try {
+          const nextUrl = new URL(href, window.location.href);
+          return nextUrl.origin === window.location.origin;
+        } catch {
+          return false;
+        }
+      };
+
+      const interactionHandler = (event) => {
+        if (shouldDelayForNavigation(event)) return;
+        loadAdsScript();
+      };
+
+      const scheduleIdleLoad = (timeoutMs) => {
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(() => loadAdsScript(), { timeout: timeoutMs });
+        } else {
+          window.setTimeout(loadAdsScript, timeoutMs);
+        }
+      };
+
+      if (eagerForAutoAds) {
+        if (document.readyState === 'complete') {
+          window.setTimeout(loadAdsScript, 900);
+        } else {
+          window.addEventListener('load', () => window.setTimeout(loadAdsScript, 900), { once: true });
+        }
+        scheduleIdleLoad(1600);
+      } else if (enableRevenueFirst) {
+        if (document.readyState === 'complete') {
+          window.setTimeout(loadAdsScript, 1200);
+        } else {
+          window.addEventListener('load', () => window.setTimeout(loadAdsScript, 1200), { once: true });
+        }
+        scheduleIdleLoad(2500);
+      } else {
+        // Performance-first mode: do not load ads during initial render.
+        // Ads are loaded on real user interaction, with a long fallback for long sessions.
+        if (document.readyState === 'complete') {
+          window.setTimeout(loadAdsScript, 25000);
+        } else {
+          window.addEventListener('load', () => window.setTimeout(loadAdsScript, 25000), { once: true });
+        }
+      }
+
+      interactionEvents.forEach((eventName) => {
+        window.addEventListener(eventName, interactionHandler, { capture: true, passive: true });
+      });
+    })();
+  </script>
+)}

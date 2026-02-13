@@ -1,0 +1,68 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+
+const title = 'Contact';
+const description = 'Official contact channels for GPACalc: email, X, and GitHub.';
+const canonical = 'https://gpacalc.app/contact/';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: title,
+  description
+};
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} schema={schema}>
+  <section class="mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-3 tracking-tight">Contact</h1>
+    <p class="text-lg text-stone-500 font-medium max-w-3xl">
+      Use the official channels below for bug reports, correction requests, and product feedback.
+    </p>
+  </section>
+
+  <section class="grid gap-5 mb-10 md:grid-cols-3">
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Official Email</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-3">Email</h2>
+      <p class="text-stone-600 leading-relaxed mb-4">
+        For general support, partnership, and privacy requests.
+      </p>
+      <a href="mailto:contact@gpacalc.app" class="inline-flex items-center rounded-xl border border-stone-200 px-4 py-2 text-sm font-semibold text-stone-700 hover:border-emerald-400 hover:text-emerald-700 transition-colors">
+        contact@gpacalc.app
+      </a>
+    </div>
+
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Primary</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-3">X (Twitter)</h2>
+      <p class="text-stone-600 leading-relaxed mb-4">
+        Fastest channel for feedback and updates.
+      </p>
+      <a href="https://x.com/yidabuilds" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-xl border border-stone-200 px-4 py-2 text-sm font-semibold text-stone-700 hover:border-emerald-400 hover:text-emerald-700 transition-colors">
+        https://x.com/yidabuilds
+      </a>
+    </div>
+
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Technical</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-3">GitHub Repository</h2>
+      <p class="text-stone-600 leading-relaxed mb-4">
+        Report reproducible bugs or submit enhancement requests with details.
+      </p>
+      <a href="https://github.com/Yida-Dev/gpa-calculator" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-xl border border-stone-200 px-4 py-2 text-sm font-semibold text-stone-700 hover:border-emerald-400 hover:text-emerald-700 transition-colors">
+        https://github.com/Yida-Dev/gpa-calculator
+      </a>
+    </div>
+  </section>
+
+  <section class="mb-10 bg-stone-100 border border-stone-200 rounded-2xl p-6">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">What to include in reports</h2>
+    <ul class="list-disc pl-6 text-stone-700 leading-relaxed space-y-2">
+      <li>Page URL and the exact issue.</li>
+      <li>Expected result and actual result.</li>
+      <li>School or grading scale involved, if applicable.</li>
+      <li>Optional screenshot for quicker diagnosis.</li>
+    </ul>
+  </section>
+</ToolLayout>

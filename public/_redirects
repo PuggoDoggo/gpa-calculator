@@ -1,0 +1,7 @@
+# Canonical host + protocol
+https://www.gpacalc.app/* https://gpacalc.app/:splat 301
+http://www.gpacalc.app/* https://gpacalc.app/:splat 301
+http://gpacalc.app/* https://gpacalc.app/:splat 301
+
+# Canonical sitemap URL for Search Console users who submit /sitemap.xml
+/sitemap.xml /sitemap-index.xml 301

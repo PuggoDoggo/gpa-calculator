@@ -1,0 +1,56 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+
+const title = 'E-E-A-T Trust Center';
+const description = 'Experience, Expertise, Authoritativeness, and Trust documentation for GPACalc.';
+const canonical = 'https://gpacalc.app/eeat/';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description
+};
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} schema={schema}>
+  <section class="mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-3 tracking-tight">E-E-A-T Trust Center</h1>
+    <p class="text-lg text-stone-500 font-medium max-w-3xl">
+      This hub consolidates GPACalc trust documentation for users and search engines.
+    </p>
+  </section>
+
+  <section class="grid gap-5 mb-10 md:grid-cols-2">
+    <a href="/about/" class="bg-white border border-stone-200 rounded-2xl p-6 hover:border-emerald-400 transition-colors">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Experience</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-2">About</h2>
+      <p class="text-stone-600">Who builds and maintains GPACalc, and the product scope.</p>
+    </a>
+    <a href="/methodology/" class="bg-white border border-stone-200 rounded-2xl p-6 hover:border-emerald-400 transition-colors">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Expertise</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-2">Methodology</h2>
+      <p class="text-stone-600">Transparent formulas, scale logic, and data handling rules.</p>
+    </a>
+    <a href="/editorial-policy/" class="bg-white border border-stone-200 rounded-2xl p-6 hover:border-emerald-400 transition-colors">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Authoritativeness</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-2">Editorial Policy</h2>
+      <p class="text-stone-600">Update standards, correction process, and claim boundaries.</p>
+    </a>
+    <a href="/privacy/" class="bg-white border border-stone-200 rounded-2xl p-6 hover:border-emerald-400 transition-colors">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Trust</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-2">Privacy Policy</h2>
+      <p class="text-stone-600">What data is processed and why.</p>
+    </a>
+    <a href="/terms/" class="bg-white border border-stone-200 rounded-2xl p-6 hover:border-emerald-400 transition-colors">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Trust</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-2">Terms of Use</h2>
+      <p class="text-stone-600">Rules, limitations, and service boundaries.</p>
+    </a>
+    <a href="/contact/" class="bg-white border border-stone-200 rounded-2xl p-6 hover:border-emerald-400 transition-colors">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Trust</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-2">Contact</h2>
+      <p class="text-stone-600">Official communication channels.</p>
+    </a>
+  </section>
+</ToolLayout>

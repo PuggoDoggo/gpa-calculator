@@ -1,0 +1,70 @@
+---
+import ToolLayout from '../layouts/ToolLayout.astro';
+
+const title = 'Editorial Policy';
+const description = 'How GPACalc reviews educational content, handles corrections, and maintains consistency across GPA tools.';
+const canonical = 'https://gpacalc.app/editorial-policy/';
+const lastUpdated = 'February 13, 2026';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description
+};
+---
+
+<ToolLayout title={title} description={description} canonical={canonical} schema={schema}>
+  <section class="mb-8">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-stone-900 mb-3 tracking-tight">Editorial Policy</h1>
+    <p class="text-lg text-stone-500 font-medium max-w-3xl">
+      This policy explains how educational content and scale references are written, reviewed, and corrected on GPACalc.
+    </p>
+    <p class="text-sm text-stone-400 mt-3">Last updated: {lastUpdated}</p>
+  </section>
+
+  <section class="mb-10 grid gap-5 md:grid-cols-2">
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Expertise</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-3">Accuracy first</h2>
+      <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+        <li>Calculator logic must match the methodology documented on site.</li>
+        <li>School-specific content must reflect published school grading references where available.</li>
+        <li>Formula explanations are written for clarity and reproducibility.</li>
+      </ul>
+    </div>
+    <div class="bg-white border border-stone-200 rounded-2xl p-6">
+      <p class="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Authoritativeness</p>
+      <h2 class="text-xl font-bold text-stone-900 mb-3">Conflict handling</h2>
+      <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+        <li>If generic formulas conflict with school policy, school policy takes priority.</li>
+        <li>Ambiguous mapping is labeled as estimate.</li>
+        <li>We avoid claims that cannot be verified.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="mb-10 bg-white border border-stone-200 rounded-2xl p-6">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">Corrections Policy</h2>
+    <ul class="list-disc pl-6 text-stone-600 leading-relaxed space-y-2">
+      <li>Users can report issues through GitHub Issues or X.</li>
+      <li>When an accuracy issue is confirmed, the affected page is updated and re-deployed.</li>
+      <li>Critical calculator bugs are prioritized ahead of content refinements.</li>
+    </ul>
+    <div class="mt-4 flex flex-wrap gap-3">
+      <a href="https://github.com/Yida-Dev/gpa-calculator/issues" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-xl border border-stone-200 px-4 py-2 text-sm font-semibold text-stone-700 hover:border-emerald-400 hover:text-emerald-700 transition-colors">
+        Report on GitHub
+      </a>
+      <a href="https://x.com/yidabuilds" target="_blank" rel="noopener noreferrer" class="inline-flex items-center rounded-xl border border-stone-200 px-4 py-2 text-sm font-semibold text-stone-700 hover:border-emerald-400 hover:text-emerald-700 transition-colors">
+        Contact on X
+      </a>
+    </div>
+  </section>
+
+  <section class="mb-10 bg-orange-50 border border-orange-200 rounded-2xl p-6">
+    <h2 class="text-2xl font-bold text-stone-900 mb-4 tracking-tight">Non-advisory Notice</h2>
+    <p class="text-stone-700 leading-relaxed">
+      GPACalc provides planning-oriented educational information and calculators. It is not legal, admissions, scholarship, or registrar advice. Always confirm final requirements with your institution.
+    </p>
+  </section>
+</ToolLayout>
