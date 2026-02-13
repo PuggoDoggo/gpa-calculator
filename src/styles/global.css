@@ -42,7 +42,7 @@
 }
 
 * {
-  font-family: "Avenir Next", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  font-family: "DM Sans", "Avenir Next", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
 }
 
 html {
@@ -56,10 +56,10 @@ body {
   line-height: 1.6;
 }
 
-/* Display headings use Fraunces */
+/* Display headings use DM Serif Display */
 h1, h2, .display-font {
-  font-family: "Avenir Next", "SF Pro Display", "Segoe UI", system-ui, sans-serif;
-  font-weight: 600;
+  font-family: "DM Serif Display", "Avenir Next", "SF Pro Display", system-ui, serif;
+  font-weight: 400;
   letter-spacing: -0.02em;
 }
 
