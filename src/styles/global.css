@@ -42,7 +42,7 @@
 }
 
 * {
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: "Avenir Next", "SF Pro Text", "Segoe UI", system-ui, sans-serif;
 }
 
 html {
@@ -58,7 +58,7 @@ body {
 
 /* Display headings use Fraunces */
 h1, h2, .display-font {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: "Avenir Next", "SF Pro Display", "Segoe UI", system-ui, sans-serif;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
@@ -252,4 +252,26 @@ h1, h2, .display-font {
 .badge-accent {
   background: #fff7ed;
   color: var(--color-accent-dark);
+}
+
+/* 对比度修复：统一提升浅色文本与品牌色的可读性 */
+.text-stone-400 {
+  color: #6b7280 !important;
+}
+
+.text-emerald-600 {
+  color: #047857 !important;
+}
+
+.text-orange-500,
+.text-orange-600 {
+  color: #9a3412 !important;
+}
+
+.text-\[\#10B981\] {
+  color: #047857 !important;
+}
+
+.bg-\[\#10B981\] {
+  background-color: #047857 !important;
 }

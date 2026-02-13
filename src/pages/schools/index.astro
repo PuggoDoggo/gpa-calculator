@@ -1,10 +1,11 @@
 ---
 import ToolLayout from '../../layouts/ToolLayout.astro';
 import FAQ from '../../components/FAQ.astro';
+import AdUnit from '../../components/AdUnit.astro';
 import { schoolsByCountry } from '../../data/schools';
 
-const title = 'School GPA Calculators for Singapore, Malaysia and India';
-const description = 'Find your school-specific GPA calculator. Includes NUS, NTU, SMU, SP, NP, TP, NYP, RP, UM, UKM, USM, UTM and UPM grading systems.';
+const title = 'School GPA Calculators for Singapore and Malaysia Universities';
+const description = 'Find your school-specific GPA calculator. Includes all Singapore autonomous universities and polytechnics plus Malaysian public universities.';
 
 const schema = {
   '@context': 'https://schema.org',
@@ -52,6 +53,8 @@ const countryOrder = ['Singapore', 'Malaysia', 'India', 'United States'];
           {schoolsByCountry[country].map((school) => (
             <a
               href={`/schools/${school.id}`}
+              data-school-id={school.id}
+              data-country={country}
               class="group rounded-xl border border-stone-200 p-4 bg-[#FFFBF5] hover:border-emerald-400 transition-colors"
             >
               <div class="flex items-center justify-between gap-3">
@@ -71,5 +74,31 @@ const countryOrder = ['Singapore', 'Malaysia', 'India', 'United States'];
     ))}
   </section>
 
+  <AdUnit placement="in-content" />
+
   <FAQ items={faqs} />
+
+  <script>
+    type TrackPayload = Record<string, string | number | boolean>;
+    const trackEvent = (name: string, payload: TrackPayload = {}) => {
+      const umami = (window as Window & {
+        umami?: {
+          track?: (eventName: string, eventData?: TrackPayload) => void;
+        };
+      }).umami;
+      if (!umami?.track) return;
+      umami.track(name, payload);
+    };
+
+    document.querySelectorAll('a[data-school-id]').forEach((link) => {
+      link.addEventListener('click', () => {
+        const schoolId = (link as HTMLElement).dataset.schoolId || '';
+        const country = (link as HTMLElement).dataset.country || '';
+        trackEvent('school_card_clicked', {
+          school_id: schoolId,
+          country
+        });
+      });
+    });
+  </script>
 </ToolLayout>

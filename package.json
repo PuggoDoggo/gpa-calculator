@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "guard:i18n": "node scripts/validate-i18n-guardrails.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "deploy": "bash scripts/deploy-cloudflare.sh",
+    "setup:umami": "bash scripts/setup-umami.sh"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.0",

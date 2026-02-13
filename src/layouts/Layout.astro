@@ -2,17 +2,29 @@
 import '../styles/global.css';
 import SEO from '../components/SEO.astro';
 import AdUnit from '../components/AdUnit.astro';
+import AdsenseLoader from '../components/AdsenseLoader.astro';
+import InternalLinkPrefetch from '../components/InternalLinkPrefetch.astro';
+import UmamiAnalytics from '../components/UmamiAnalytics.astro';
 
 interface Props {
   title: string;
   description: string;
+  canonical?: string;
   schema?: object;
   faqs?: Array<{ question: string; answer: string }>;
   showSidebar?: boolean;
 }
 
-const { title, description, schema, faqs, showSidebar = true } = Astro.props;
+const { title, description, canonical, schema, faqs, showSidebar = true } = Astro.props;
 const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-9622161915145913';
+const adStrategy = import.meta.env.PUBLIC_AD_STRATEGY || 'performance';
+const adAutoAds = (import.meta.env.PUBLIC_ADSENSE_AUTO_ADS || '').toLowerCase() === 'true';
+const adOverlayMode = import.meta.env.PUBLIC_ADSENSE_OVERLAYS || 'bottom';
+const hasTopAd = Boolean(import.meta.env.PUBLIC_AD_SLOT_TOP);
+const hasSidebarAd = Boolean(import.meta.env.PUBLIC_AD_SLOT_SIDEBAR);
+const hasInContentAd = Boolean(import.meta.env.PUBLIC_AD_SLOT_IN_CONTENT);
+const hasBottomAd = Boolean(import.meta.env.PUBLIC_AD_SLOT_BOTTOM);
+const hasAnyManualAdSlots = hasTopAd || hasSidebarAd || hasInContentAd || hasBottomAd;
 
 const navLinks = [
   { href: '/', label: 'Cumulative GPA' },
@@ -28,12 +40,6 @@ const navLinks = [
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Space+Grotesk:wght@400;500;600;700;800&display=swap"
-    />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
@@ -41,17 +47,13 @@ const navLinks = [
     <SEO
       title={title}
       description={description}
+      canonical={canonical}
       schema={schema}
       faqs={faqs}
     />
 
-    {adsenseClient && (
-      <script
-        async
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-        crossorigin="anonymous"
-      ></script>
-    )}
+    <UmamiAnalytics />
+
   </head>
 
   <body class="min-h-screen">
@@ -66,13 +68,14 @@ const navLinks = [
       <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <!-- Logo -->
-          <a href="/" class="flex items-center gap-2 group">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/40 transition-shadow">
+          <a href="/" class="flex items-center gap-2">
+            <div class="w-9 h-9 rounded-full bg-[#0b8c64] flex items-center justify-center shadow-[3px_3px_0px_#1C1917]">
               <span class="text-white font-bold text-sm">G</span>
             </div>
-            <span class="font-semibold text-lg">
-              <span class="text-[var(--color-text)]">GPA</span><span class="text-[var(--color-primary)]">Calc</span>
-            </span>
+            <div class="leading-tight">
+              <p class="font-bold text-lg text-[var(--color-text)]">GPACalc</p>
+              <p class="text-[11px] text-stone-500">GPA Calculator</p>
+            </div>
           </a>
 
           <!-- Desktop Nav -->
@@ -124,10 +127,11 @@ const navLinks = [
       </nav>
     </header>
 
-    <!-- Top Ad -->
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <AdUnit slot="top" />
-    </div>
+    {hasTopAd && (
+      <div class="hidden lg:block max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <AdUnit placement="top" strategy={adStrategy} />
+      </div>
+    )}
 
     <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -141,16 +145,16 @@ const navLinks = [
           <!-- Sidebar -->
           <aside class="hidden lg:block lg:col-span-4">
             <div class="sticky top-24 space-y-6">
-              <AdUnit slot="sidebar" />
+              {hasSidebarAd && <AdUnit placement="sidebar" strategy={adStrategy} />}
 
               <!-- Related calculators -->
               <div class="card p-6">
-                <h3 class="font-semibold text-[var(--color-text)] mb-4 flex items-center gap-2">
+                <p class="font-semibold text-[var(--color-text)] mb-4 flex items-center gap-2">
                   <svg class="w-5 h-5 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                   </svg>
                   Related Tools
-                </h3>
+                </p>
                 <ul class="space-y-2">
                   <li>
                     <a href="/" class="flex items-center gap-2 text-sm text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">
@@ -181,12 +185,12 @@ const navLinks = [
 
               <!-- Schools quick links -->
               <div class="card p-6">
-                <h3 class="font-semibold text-[var(--color-text)] mb-4 flex items-center gap-2">
+                <p class="font-semibold text-[var(--color-text)] mb-4 flex items-center gap-2">
                   <svg class="w-5 h-5 text-[var(--color-accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>
                   Popular Schools
-                </h3>
+                </p>
                 <div class="flex flex-wrap gap-2">
                   <a href="/schools/nus" class="badge badge-primary">NUS</a>
                   <a href="/schools/ntu" class="badge badge-primary">NTU</a>
@@ -203,17 +207,18 @@ const navLinks = [
       )}
     </main>
 
-    <!-- Bottom Ad -->
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <AdUnit slot="bottom" />
-    </div>
+    {hasBottomAd && (
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <AdUnit placement="bottom" strategy={adStrategy} />
+      </div>
+    )}
 
     <!-- Footer -->
     <footer class="border-t border-[var(--color-border-light)] mt-16 bg-[var(--color-surface)]">
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
           <div>
-            <h4 class="font-semibold text-[var(--color-text)] mb-4">Calculators</h4>
+            <p class="font-semibold text-[var(--color-text)] mb-4">Calculators</p>
             <ul class="space-y-2 text-sm">
               <li><a href="/" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">Cumulative GPA</a></li>
               <li><a href="/schools/nus" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">NUS GPA Calculator</a></li>
@@ -223,7 +228,7 @@ const navLinks = [
           </div>
 
           <div>
-            <h4 class="font-semibold text-[var(--color-text)] mb-4">Converters</h4>
+            <p class="font-semibold text-[var(--color-text)] mb-4">Converters</p>
             <ul class="space-y-2 text-sm">
               <li><a href="/gpa-to-percentage" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">GPA to Percentage</a></li>
               <li><a href="/percentage-to-gpa" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">Percentage to GPA</a></li>
@@ -233,7 +238,7 @@ const navLinks = [
           </div>
 
           <div>
-            <h4 class="font-semibold text-[var(--color-text)] mb-4">Schools</h4>
+            <p class="font-semibold text-[var(--color-text)] mb-4">Schools</p>
             <ul class="space-y-2 text-sm">
               <li><a href="/schools/nus" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">NUS</a></li>
               <li><a href="/schools/ntu" class="text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors">NTU</a></li>
@@ -243,13 +248,13 @@ const navLinks = [
           </div>
 
           <div>
-            <h4 class="font-semibold text-[var(--color-text)] mb-4">GPACalc.app</h4>
+            <p class="font-semibold text-[var(--color-text)] mb-4">GPACalc.app</p>
             <p class="text-sm text-[var(--color-text-muted)] mb-4">
               Free GPA calculator for students worldwide. Calculate cumulative GPA, CGPA, and more.
             </p>
             <div class="flex items-center gap-2">
-              <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
-                <span class="text-white font-bold text-xs">G</span>
+              <div class="w-8 h-8 rounded-full bg-[#0b8c64] flex items-center justify-center shadow-[2px_2px_0px_#1C1917]">
+                <span class="text-white font-bold text-sm">G</span>
               </div>
               <span class="text-sm font-medium text-[var(--color-text)]">GPACalc.app</span>
             </div>
@@ -261,6 +266,16 @@ const navLinks = [
         </div>
       </div>
     </footer>
+
+    <AdsenseLoader
+      client={adsenseClient}
+      strategy={adStrategy}
+      autoAds={adAutoAds}
+      hasManualSlots={hasAnyManualAdSlots}
+      overlayMode={adOverlayMode}
+    />
+
+    <InternalLinkPrefetch />
 
     <!-- Mobile menu script -->
     <script>

@@ -2,6 +2,7 @@
 import ToolLayout from '../../layouts/ToolLayout.astro';
 import GPACalculator from '../../components/GPACalculator.astro';
 import FAQ from '../../components/FAQ.astro';
+import AdUnit from '../../components/AdUnit.astro';
 import { schools } from '../../data/schools';
 import type { School } from '../../data/schools';
 
@@ -80,6 +81,8 @@ const relatedSchools = schools
   <section class="mb-10">
     <GPACalculator initialSchool={school.id} />
   </section>
+
+  <AdUnit placement="in-content" />
 
   <section class="mb-8 grid gap-4 md:grid-cols-2">
     <div class="bg-white border border-stone-200 rounded-2xl p-5">

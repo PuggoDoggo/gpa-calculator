@@ -1,11 +1,20 @@
 ---
 interface Props {
-  slot: 'top' | 'sidebar' | 'in-content' | 'bottom';
+  placement: 'top' | 'sidebar' | 'in-content' | 'bottom';
   className?: string;
+  strategy?: 'performance' | 'revenue';
 }
 
-const { slot, className = '' } = Astro.props;
+const { placement, className = '', strategy = 'performance' } = Astro.props;
 const adClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-9622161915145913';
+const adSlotByPlacement: Record<Props['placement'], string | undefined> = {
+  top: import.meta.env.PUBLIC_AD_SLOT_TOP,
+  sidebar: import.meta.env.PUBLIC_AD_SLOT_SIDEBAR,
+  'in-content': import.meta.env.PUBLIC_AD_SLOT_IN_CONTENT,
+  bottom: import.meta.env.PUBLIC_AD_SLOT_BOTTOM,
+};
+const adSlot = adSlotByPlacement[placement];
+const adId = `ads-${placement}-${Math.random().toString(36).slice(2, 10)}`;
 
 const adStyles: Record<string, string> = {
   'top': 'min-h-[90px]',
@@ -13,18 +22,153 @@ const adStyles: Record<string, string> = {
   'in-content': 'min-h-[250px]',
   'bottom': 'min-h-[90px]'
 };
+
+const adFormatBySlot: Record<Props['placement'], string> = {
+  top: 'auto',
+  sidebar: 'auto',
+  'in-content': 'auto',
+  bottom: 'auto'
+};
 ---
 
-<ins
-  class:list={['adsbygoogle', 'ad-unit', `ad-${slot}`, adStyles[slot], className]}
-  style="display:block"
-  data-ad-client={adClient}
-  data-ad-format="auto"
-  data-full-width-responsive="true"
-/>
-<script is:inline>
-  (window.adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+{adSlot && (
+  <>
+    <ins
+      id={adId}
+      class:list={['adsbygoogle', 'ad-unit', `ad-${placement}`, adStyles[placement], className]}
+      style="display:block"
+      data-ad-client={adClient}
+      data-ad-slot={adSlot}
+      data-ad-format={adFormatBySlot[placement]}
+      data-full-width-responsive="true"
+      aria-label="Advertisement"
+    />
+    <script is:inline define:vars={{ adId, strategy }}>
+      (() => {
+        const ad = document.getElementById(adId);
+        if (!ad) return;
+        if (window.__gpacalcAdsSuppressed) {
+          ad.style.display = 'none';
+          return;
+        }
+
+        const revenueFirst = strategy === 'revenue';
+        let retries = 0;
+        const maxRetries = revenueFirst ? 100 : 40;
+        let intervalId;
+        let observer;
+        let statusObserver;
+        let resizeObserver;
+        let stableCount = 0;
+        let lastStableWidth = 0;
+
+        const canRender = () => {
+          const style = window.getComputedStyle(ad);
+          const rect = ad.getBoundingClientRect();
+          const width = Math.floor(rect.width);
+          const height = Math.floor(rect.height);
+          const visible =
+            style.display !== 'none' &&
+            style.visibility !== 'hidden' &&
+            ad.offsetParent !== null &&
+            width >= 120 &&
+            height >= 50 &&
+            ad.offsetWidth > 0 &&
+            ad.offsetHeight > 0;
+
+          if (!visible) {
+            stableCount = 0;
+            lastStableWidth = 0;
+            return false;
+          }
+
+          if (width === lastStableWidth) {
+            stableCount += 1;
+          } else {
+            stableCount = 1;
+            lastStableWidth = width;
+          }
+
+          return (
+            stableCount >= 2
+          );
+        };
+
+        const cleanup = () => {
+          if (intervalId) window.clearInterval(intervalId);
+          if (observer) observer.disconnect();
+          if (statusObserver) statusObserver.disconnect();
+          if (resizeObserver) resizeObserver.disconnect();
+          document.removeEventListener('adsense:ready', queueRender);
+          document.removeEventListener('adsense:suppressed', suppressAd);
+          window.removeEventListener('resize', queueRender);
+        };
+
+        const suppressAd = () => {
+          ad.style.display = 'none';
+          cleanup();
+        };
+
+        const handleStatus = () => {
+          if (ad.getAttribute('data-ad-status') !== 'unfilled') return;
+          ad.style.display = 'none';
+          cleanup();
+        };
+
+        const renderAd = () => {
+          if (ad.dataset.adsRendered === '1') return true;
+          if (!canRender()) return false;
+          if (!window.adsbygoogle || typeof window.adsbygoogle.push !== 'function') return false;
+
+          try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+            ad.dataset.adsRendered = '1';
+            return true;
+          } catch {
+            return false;
+          }
+        };
+
+        const queueRender = () => {
+          retries += 1;
+          const done = renderAd();
+          if (done || retries >= maxRetries) cleanup();
+        };
+
+        const shouldObserve = !(
+          revenueFirst &&
+          (ad.classList.contains('ad-top') || ad.classList.contains('ad-bottom'))
+        );
+
+        if (shouldObserve && 'IntersectionObserver' in window) {
+          observer = new IntersectionObserver(
+            (entries) => {
+              const visible = entries.some((entry) => entry.isIntersecting);
+              if (visible) queueRender();
+            },
+            { rootMargin: revenueFirst ? '1000px 0px' : '200px 0px' }
+          );
+          observer.observe(ad);
+        }
+
+        statusObserver = new MutationObserver(handleStatus);
+        statusObserver.observe(ad, { attributes: true, attributeFilter: ['data-ad-status'] });
+
+        if ('ResizeObserver' in window) {
+          resizeObserver = new ResizeObserver(() => queueRender());
+          resizeObserver.observe(ad);
+        }
+
+        intervalId = window.setInterval(queueRender, revenueFirst ? 300 : 500);
+        document.addEventListener('adsense:ready', queueRender);
+        document.addEventListener('adsense:suppressed', suppressAd);
+        window.addEventListener('resize', queueRender, { passive: true });
+        window.addEventListener('load', queueRender, { once: true });
+        queueRender();
+      })();
+    </script>
+  </>
+)}
 
 <style>
   .ad-unit {

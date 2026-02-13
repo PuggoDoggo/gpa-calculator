@@ -2,24 +2,58 @@
 import '../styles/global.css';
 import SEO from '../components/SEO.astro';
 import AdUnit from '../components/AdUnit.astro';
-import { schools, sgUniversities, sgPolytechnics, myUniversities } from '../data/schools';
+import AdsenseLoader from '../components/AdsenseLoader.astro';
+import InternalLinkPrefetch from '../components/InternalLinkPrefetch.astro';
+import UmamiAnalytics from '../components/UmamiAnalytics.astro';
+import { schools } from '../data/schools';
 
 interface Props {
   title: string;
   description: string;
+  canonical?: string;
   schema?: object;
   faqs?: Array<{ question: string; answer: string }>;
   currentSchool?: string;
 }
 
-const { title, description, schema, faqs, currentSchool } = Astro.props;
+const { title, description, canonical, schema, faqs, currentSchool } = Astro.props;
 const adsenseClient = import.meta.env.PUBLIC_ADSENSE_CLIENT || 'ca-pub-9622161915145913';
+const adStrategy = import.meta.env.PUBLIC_AD_STRATEGY || 'performance';
+const adAutoAds = (import.meta.env.PUBLIC_ADSENSE_AUTO_ADS || '').toLowerCase() === 'true';
+const adOverlayMode = import.meta.env.PUBLIC_ADSENSE_OVERLAYS || 'bottom';
+const hasTopAd = Boolean(import.meta.env.PUBLIC_AD_SLOT_TOP);
+const hasInContentAd = Boolean(import.meta.env.PUBLIC_AD_SLOT_IN_CONTENT);
+const hasBottomAd = Boolean(import.meta.env.PUBLIC_AD_SLOT_BOTTOM);
+const hasAnyManualAdSlots = hasTopAd || hasInContentAd || hasBottomAd;
 
 const navLinks = [
   { href: '/', label: 'Cumulative GPA', icon: 'calc' },
   { href: '/gpa-to-percentage', label: 'GPA to %', icon: 'convert' },
   { href: '/percentage-to-gpa', label: '% to GPA', icon: 'convert' },
 ];
+
+const regionOrder = ['Singapore', 'Malaysia', 'India', 'United States'];
+const schoolTypeOrder = ['university', 'polytechnic', 'college'] as const;
+const schoolTypeLabel: Record<(typeof schoolTypeOrder)[number], string> = {
+  university: 'Universities',
+  polytechnic: 'Polytechnics',
+  college: 'Colleges'
+};
+
+const sidebarSchoolGroups = regionOrder
+  .map((region) => {
+    const schoolsInRegion = schools.filter((school) => school.country === region);
+    const typeGroups = schoolTypeOrder
+      .map((type) => ({
+        type,
+        label: schoolTypeLabel[type],
+        schools: schoolsInRegion.filter((school) => school.type === type)
+      }))
+      .filter((group) => group.schools.length > 0);
+
+    return { region, typeGroups };
+  })
+  .filter((group) => group.typeGroups.length > 0);
 ---
 
 <!doctype html>
@@ -28,12 +62,6 @@ const navLinks = [
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap"
-    />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="index, follow" />
     <meta name="googlebot" content="index, follow" />
@@ -41,28 +69,13 @@ const navLinks = [
     <SEO
       title={title}
       description={description}
+      canonical={canonical}
       schema={schema}
       faqs={faqs}
     />
 
-    {adsenseClient && (
-      <script
-        async
-        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${adsenseClient}`}
-        crossorigin="anonymous"
-      ></script>
-    )}
+    <UmamiAnalytics />
 
-    <style is:global>
-      * {
-        font-family: 'Space Grotesk', system-ui, sans-serif;
-      }
-      h1, h2, h3 {
-        font-family: 'Space Grotesk', system-ui, sans-serif;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-      }
-    </style>
   </head>
 
   <body class="min-h-screen bg-[#FFFBF5] text-[#1C1917]">
@@ -70,7 +83,7 @@ const navLinks = [
     <header class="lg:hidden sticky top-0 z-50 bg-[#FFFBF5]/95 backdrop-blur-md border-b border-stone-200">
       <div class="flex items-center justify-between px-4 h-14">
         <a href="/" class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-[#10B981] flex items-center justify-center shadow-[3px_3px_0px_#1C1917]">
+          <div class="w-8 h-8 rounded-full bg-[#0b8c64] flex items-center justify-center shadow-[3px_3px_0px_#1C1917]">
             <span class="text-white font-bold text-sm">G</span>
           </div>
           <span class="font-bold text-lg">GPACalc</span>
@@ -125,7 +138,7 @@ const navLinks = [
       <aside class="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 lg:border-r lg:border-stone-200 lg:bg-white">
         <!-- Logo -->
         <div class="flex items-center gap-3 px-6 h-16 border-b border-stone-200">
-          <div class="w-9 h-9 rounded-xl bg-[#10B981] flex items-center justify-center shadow-[3px_3px_0px_#1C1917]">
+          <div class="w-9 h-9 rounded-full bg-[#0b8c64] flex items-center justify-center shadow-[3px_3px_0px_#1C1917]">
             <span class="text-white font-bold text-lg">G</span>
           </div>
           <div>
@@ -165,61 +178,45 @@ const navLinks = [
 
           <!-- Schools Section -->
           <div class="mb-4">
-            <p class="px-3 mb-2 text-xs font-bold text-stone-400 uppercase tracking-wider">Universities</p>
-            <div class="space-y-0.5">
-              {sgUniversities.map(school => (
-                <a
-                  href={`/schools/${school.id}`}
-                  class:list={[
-                    'flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors',
-                    currentSchool === school.id
-                      ? 'bg-[#10B981]/10 text-[#10B981] font-semibold'
-                      : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900'
-                  ]}
-                >
-                  <span>{school.shortName}</span>
-                  <span class="text-xs text-stone-400">{school.maxGPA.toFixed(1)}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <div class="mb-4">
-            <p class="px-3 mb-2 text-xs font-bold text-stone-400 uppercase tracking-wider">Polytechnics</p>
-            <div class="space-y-0.5">
-              {sgPolytechnics.map(school => (
-                <a
-                  href={`/schools/${school.id}`}
-                  class:list={[
-                    'flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors',
-                    currentSchool === school.id
-                      ? 'bg-[#10B981]/10 text-[#10B981] font-semibold'
-                      : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900'
-                  ]}
-                >
-                  <span>{school.shortName}</span>
-                  <span class="text-xs text-stone-400">{school.maxGPA.toFixed(1)}</span>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <div class="mb-4">
-            <p class="px-3 mb-2 text-xs font-bold text-stone-400 uppercase tracking-wider">Malaysia</p>
-            <div class="space-y-0.5">
-              {myUniversities.slice(0, 3).map(school => (
-                <a
-                  href={`/schools/${school.id}`}
-                  class:list={[
-                    'flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors',
-                    currentSchool === school.id
-                      ? 'bg-[#10B981]/10 text-[#10B981] font-semibold'
-                      : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900'
-                  ]}
-                >
-                  <span>{school.shortName}</span>
-                  <span class="text-xs text-stone-400">{school.maxGPA.toFixed(1)}</span>
-                </a>
+            <p class="px-3 mb-2 text-xs font-bold text-stone-400 uppercase tracking-wider">Schools</p>
+            <div class="space-y-2">
+              {sidebarSchoolGroups.map((regionGroup) => (
+                <details class="group rounded-xl border border-stone-200 bg-stone-50">
+                  <summary class="flex items-center justify-between px-3 py-2.5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                    <span class="text-xs font-bold uppercase tracking-wider text-stone-500">{regionGroup.region}</span>
+                    <svg class="w-4 h-4 text-stone-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </summary>
+                  <div class="px-2 pb-2 space-y-1.5">
+                    {regionGroup.typeGroups.map((typeGroup) => (
+                      <details class="group/type rounded-lg border border-stone-200 bg-white">
+                        <summary class="flex items-center justify-between px-3 py-2 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+                          <span class="text-[11px] font-bold uppercase tracking-wider text-stone-400">{typeGroup.label}</span>
+                          <svg class="w-3.5 h-3.5 text-stone-400 transition-transform group-open/type:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </summary>
+                        <div class="pb-2 space-y-0.5">
+                          {typeGroup.schools.map((school) => (
+                            <a
+                              href={`/schools/${school.id}`}
+                              class:list={[
+                                'flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-colors',
+                                currentSchool === school.id
+                                  ? 'bg-[#10B981]/10 text-[#10B981] font-semibold'
+                                  : 'text-stone-600 hover:bg-stone-50 hover:text-stone-900'
+                              ]}
+                            >
+                              <span>{school.shortName}</span>
+                              <span class="text-xs text-stone-400">{school.maxGPA.toFixed(1)}</span>
+                            </a>
+                          ))}
+                        </div>
+                      </details>
+                    ))}
+                  </div>
+                </details>
               ))}
             </div>
           </div>
@@ -247,11 +244,13 @@ const navLinks = [
       <!-- Main Content -->
       <main class="lg:pl-64 w-full min-h-screen">
         <!-- Top Ad (Desktop) -->
-        <div class="hidden sm:block border-b border-stone-200 bg-stone-100/50 py-3 px-4">
-          <div class="max-w-5xl mx-auto">
-            <AdUnit slot="top" />
+        {hasTopAd && (
+          <div class="hidden sm:block border-b border-stone-200 bg-stone-100/50 py-3 px-4">
+            <div class="max-w-5xl mx-auto">
+              <AdUnit placement="top" strategy={adStrategy} />
+            </div>
           </div>
-        </div>
+        )}
 
         <!-- Content -->
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
@@ -259,16 +258,18 @@ const navLinks = [
         </div>
 
         <!-- Bottom Ad -->
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <AdUnit slot="bottom" />
-        </div>
+        {hasBottomAd && (
+          <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <AdUnit placement="bottom" strategy={adStrategy} />
+          </div>
+        )}
 
         <!-- Footer -->
         <footer class="border-t border-stone-200 bg-white mt-8">
           <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div>
-                <h4 class="font-bold text-sm text-stone-900 mb-3">Calculators</h4>
+                <p class="font-bold text-sm text-stone-900 mb-3">Calculators</p>
                 <ul class="space-y-2 text-sm">
                   <li><a href="/" class="text-stone-500 hover:text-[#10B981]">Cumulative GPA</a></li>
                   <li><a href="/schools/nus" class="text-stone-500 hover:text-[#10B981]">NUS GPA</a></li>
@@ -277,14 +278,14 @@ const navLinks = [
                 </ul>
               </div>
               <div>
-                <h4 class="font-bold text-sm text-stone-900 mb-3">Converters</h4>
+                <p class="font-bold text-sm text-stone-900 mb-3">Converters</p>
                 <ul class="space-y-2 text-sm">
                   <li><a href="/gpa-to-percentage" class="text-stone-500 hover:text-[#F97316]">GPA to %</a></li>
                   <li><a href="/percentage-to-gpa" class="text-stone-500 hover:text-[#F97316]">% to GPA</a></li>
                 </ul>
               </div>
               <div>
-                <h4 class="font-bold text-sm text-stone-900 mb-3">Polytechnics</h4>
+                <p class="font-bold text-sm text-stone-900 mb-3">Polytechnics</p>
                 <ul class="space-y-2 text-sm">
                   <li><a href="/schools/sp" class="text-stone-500 hover:text-[#10B981]">SP GPA</a></li>
                   <li><a href="/schools/np" class="text-stone-500 hover:text-[#10B981]">NP GPA</a></li>
@@ -292,10 +293,10 @@ const navLinks = [
                 </ul>
               </div>
               <div>
-                <h4 class="font-bold text-sm text-stone-900 mb-3">GPACalc.app</h4>
+                <p class="font-bold text-sm text-stone-900 mb-3">GPACalc.app</p>
                 <p class="text-xs text-stone-400 mb-3">Free GPA calculator for students worldwide.</p>
                 <div class="flex items-center gap-2 mb-3">
-                  <div class="w-7 h-7 rounded-lg bg-[#10B981] flex items-center justify-center">
+                  <div class="w-7 h-7 rounded-full bg-[#0b8c64] flex items-center justify-center shadow-[2px_2px_0px_#1C1917]">
                     <span class="text-white font-bold text-xs">G</span>
                   </div>
                   <span class="text-sm font-semibold">GPACalc.app</span>
@@ -306,6 +307,20 @@ const navLinks = [
                 </a>
               </div>
             </div>
+            <div class="mt-8 pt-6 border-t border-stone-200">
+              <div class="flex flex-wrap items-center gap-3 text-sm">
+                <span class="text-xs font-bold text-stone-400 uppercase tracking-wider mr-1">Trust & Policies</span>
+                <a href="/eeat/" class="text-stone-500 hover:text-[#10B981]">E-E-A-T</a>
+                <a href="/about/" class="text-stone-500 hover:text-[#10B981]">About</a>
+                <a href="/methodology/" class="text-stone-500 hover:text-[#10B981]">Methodology</a>
+                <a href="/editorial-policy/" class="text-stone-500 hover:text-[#10B981]">Editorial Policy</a>
+                <a href="/privacy/" class="text-stone-500 hover:text-[#10B981]">Privacy</a>
+                <a href="/terms/" class="text-stone-500 hover:text-[#10B981]">Terms</a>
+                <a href="/contact/" class="text-stone-500 hover:text-[#10B981]">Contact</a>
+                <a href="https://x.com/yidabuilds" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-[#10B981]">X</a>
+                <a href="https://github.com/Yida-Dev/gpa-calculator" target="_blank" rel="noopener noreferrer" class="text-stone-500 hover:text-[#10B981]">GitHub</a>
+              </div>
+            </div>
             <div class="mt-8 pt-6 border-t border-stone-200 text-center text-xs text-stone-400">
               <p>&copy; {new Date().getFullYear()} GPACalc.app. All rights reserved.</p>
             </div>
@@ -313,6 +328,16 @@ const navLinks = [
         </footer>
       </main>
     </div>
+
+    <AdsenseLoader
+      client={adsenseClient}
+      strategy={adStrategy}
+      autoAds={adAutoAds}
+      hasManualSlots={hasAnyManualAdSlots}
+      overlayMode={adOverlayMode}
+    />
+
+    <InternalLinkPrefetch />
 
     <script>
       const menuBtn = document.getElementById('mobile-menu-btn');

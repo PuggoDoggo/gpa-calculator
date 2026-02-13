@@ -216,7 +216,7 @@ export const schools: School[] = [
       gradingNote: 'SMU cumulative GPA is on a 4.0 scale. This page uses SMU-style plus/minus mapping for term planning.',
       accuracyNote: 'School-specific rules (double counting, pass/fail options, graduation checks) should follow the latest SMU handbook.',
       sourceUrls: [
-        { label: 'SMU Career Centre FAQ (CGPA out of 4.0)', url: 'https://careercentre.smu.edu.sg/students/faq' },
+        { label: 'SMU Career Services FAQ (CGPA out of 4.0)', url: 'https://careerservices.smu.edu.sg/employers/frequently-asked-questions-employers' },
         { label: 'SMU Honours Classification', url: 'https://commencement.smu.edu.sg/graduation-and-academic-transcripts/honours-classification' }
       ]
     }
@@ -231,11 +231,11 @@ export const schools: School[] = [
     gradeScale: sgUniversityGrades,
     maxGPA: 5.0,
     seoContent: {
-      gradingNote: 'SUSS honours references are on a 5-point CGPA framework, and this page follows that 5.0 planning scale.',
+      gradingNote: 'SUSS uses a 5-point CGPA framework for undergraduate planning, and this page follows that 5.0 scale.',
       accuracyNote: 'Course-level grading and progression can differ by programme. Use your programme handbook as final authority.',
       sourceUrls: [
-        { label: 'SUSS Honours Classification', url: 'https://www.suss.edu.sg/full-time-undergraduate/how-to-apply/undergraduate-admission-requirements/honours-classification' },
-        { label: 'SUSS Undergraduate Admissions', url: 'https://www.suss.edu.sg/full-time-undergraduate' }
+        { label: 'SUSS Full-time Undergraduate Programmes', url: 'https://www.suss.edu.sg/academics/programmes/full-time-undergraduate' },
+        { label: 'SUSS Full-time Undergraduate Admission Criteria', url: 'https://www.suss.edu.sg/admissions/application-process/eligibility/full-time-undergraduate-admission-criteria' }
       ]
     }
   },
@@ -344,7 +344,7 @@ export const schools: School[] = [
       accuracyNote: 'Attendance or promotion penalties can cap grades in specific cases. Always refer to the latest NYP handbook wording.',
       sourceUrls: [
         { label: 'NYP Assessment Regulations', url: 'https://mynypportal.nyp.edu.sg/en/student-handbook/shb-academic-matters/shb-assessment-regulations.html' },
-        { label: 'NYP Attendance and Promotion Policy', url: 'https://mynypportal.nyp.edu.sg/en/student-handbook/shb-academic-matters/shb-attendance-and-promotion-policy.html' }
+        { label: 'NYP Student Handbook', url: 'https://mynypportal.nyp.edu.sg/en/student-handbook.html' }
       ]
     }
   },
@@ -377,11 +377,11 @@ export const schools: School[] = [
     gradeScale: umGrades,
     maxGPA: 4.0,
     seoContent: {
-      gradingNote: 'UM official pages publish a 4.0 CGPA system with A/A- and plus/minus grade points.',
-      accuracyNote: 'UM faculties can define programme-specific pass conditions. Follow your faculty handbook for official submission and appeal cases.',
+      gradingNote: 'UM uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Faculty-level handbooks can define programme-specific rules. Use your latest UM programme handbook as final authority.',
       sourceUrls: [
-        { label: 'UM Scheme for Marks and Grades', url: 'https://fsktm.um.edu.my/scheme-for-marks-and-grades' },
-        { label: 'UM Foundation FAQ (Class and CGPA bands)', url: 'https://study.um.edu.my/faq-asasi' }
+        { label: 'UM Official Website', url: 'https://www.um.edu.my/' },
+        { label: 'UM Study Portal', url: 'https://study.um.edu.my/' }
       ]
     }
   },
@@ -395,11 +395,11 @@ export const schools: School[] = [
     gradeScale: ukmGrades,
     maxGPA: 4.0,
     seoContent: {
-      gradingNote: 'UKM faculty handbook references a 4.0 system with A to E grade points for programme classification.',
-      accuracyNote: 'This page follows the published UKM handbook mapping. Faculty-specific rules may add progression conditions beyond grade points.',
+      gradingNote: 'UKM uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Faculty-specific regulations can differ. Use your latest UKM faculty handbook for official progression checks.',
       sourceUrls: [
-        { label: 'UKM Undergraduate Handbook (Medicine 2024/2025 PDF)', url: 'https://www.ukm.my/ppukm/wp-content/uploads/2024/09/Buku-Panduan-Prasiswazah-Program-Perubatan-Sesi-Akademik-20242025.pdf' },
-        { label: 'Study UKM FAQ (CGPA references)', url: 'https://studyukm.ukm.my/faq/' }
+        { label: 'UKM Portal', url: 'https://www.ukm.my/portal/' },
+        { label: 'UKM Main Website', url: 'https://www.ukm.my/portalukm/' }
       ]
     }
   },
@@ -413,11 +413,11 @@ export const schools: School[] = [
     gradeScale: usmGrades,
     maxGPA: 4.0,
     seoContent: {
-      gradingNote: 'USM academic advising pages publish a 4.0 grade-point table that includes D- (0.67).',
-      accuracyNote: 'Use this mapping for standard letter-graded modules. Programme-specific practical/clinical rules should follow your school regulations.',
+      gradingNote: 'USM uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Programme-level grading details may vary by school. Use your latest USM handbook for official decisions.',
       sourceUrls: [
-        { label: 'USM School of Industrial Technology - Advice for Undergraduate Studies', url: 'https://it.usm.my/index.php/en/academic/undergraduate/academic-guardian/advice-for-undergraduate-studies' },
-        { label: 'USM School of Mechanical Engineering - Advice for Undergraduate Studies', url: 'https://mech.usm.my/index.php/en/undergraduate/academic-advisor/advice-for-undergraduate-studies' }
+        { label: 'USM Official Website', url: 'https://www.usm.my/en/' },
+        { label: 'USM Admissions', url: 'https://admissions.usm.my/' }
       ]
     }
   },
@@ -431,10 +431,10 @@ export const schools: School[] = [
     gradeScale: utmGrades,
     maxGPA: 4.0,
     seoContent: {
-      gradingNote: 'UTM academic pages publish a 4.0 grade-point table with plus/minus mapping and class-of-degree bands.',
-      accuracyNote: 'For official graduation or appeal decisions, follow the latest UTM Senate and faculty regulations.',
+      gradingNote: 'UTM uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Faculty rules can differ by programme. Use the latest UTM academic regulations as final authority.',
       sourceUrls: [
-        { label: 'UTM What is your CGPA? (Grade table and class bands)', url: 'https://studentaffairs.utm.my/manfin/what-is-your-cgpa/' },
+        { label: 'UTM Official Website', url: 'https://www.utm.my/' },
         { label: 'UTM Undergraduate Admissions', url: 'https://admission.utm.my/undergraduate-malaysian/' }
       ]
     }
@@ -449,11 +449,282 @@ export const schools: School[] = [
     gradeScale: upmGrades,
     maxGPA: 4.0,
     seoContent: {
-      gradingNote: 'UPM Academic Matters Rules publish a 4.0 table with A- at 3.75 and B+ at 3.50 for many undergraduate programmes.',
-      accuracyNote: 'UPM has programme-specific variants (for example medicine and veterinary). Use your programme rulebook as final authority.',
+      gradingNote: 'UPM uses a 4.0 CGPA framework. This page keeps UPM-specific planning points used in UPM academic materials.',
+      accuracyNote: 'UPM has programme-level variants. Use your programme handbook and official UPM regulations for final decisions.',
       sourceUrls: [
+        { label: 'UPM Official Website', url: 'https://www.upm.edu.my/' },
+        { label: 'UPM Academic Portal', url: 'https://akademik.upm.edu.my/' },
         { label: 'UPM Academic Matters Rules (Official PDF)', url: 'https://akademik.upm.edu.my/upload/dokumen/menul320240110122853BGAKA1_Academic_Matter_opti.pdf' },
-        { label: 'UPM Faculty of Science Dean and Vice Chancellor List', url: 'https://fs.upm.edu.my/services/undergraduates/dean_and_vice_chancellor_lists-3020' }
+      ]
+    }
+  },
+  {
+    id: 'uitm',
+    name: 'Universiti Teknologi MARA',
+    shortName: 'UiTM',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UiTM uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Programme handbooks can have specific progression and graduation rules. Verify with your latest UiTM faculty handbook.',
+      sourceUrls: [
+        { label: 'UiTM Official Website', url: 'https://www.uitm.edu.my/' },
+        { label: 'UiTM Study Portal', url: 'https://study.uitm.edu.my/' }
+      ]
+    }
+  },
+  {
+    id: 'iium',
+    name: 'International Islamic University Malaysia',
+    shortName: 'IIUM',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'IIUM uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Kulliyyah-level requirements can differ. Verify with the latest IIUM academic regulations for official submission.',
+      sourceUrls: [
+        { label: 'IIUM Official Website', url: 'https://www.iium.edu.my/v2/' },
+        { label: 'IIUM Academics', url: 'https://www.iium.edu.my/v2/academics/' }
+      ]
+    }
+  },
+  {
+    id: 'uum',
+    name: 'Universiti Utara Malaysia',
+    shortName: 'UUM',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UUM uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'School-level regulations may vary. Verify with the latest UUM handbook for official progression decisions.',
+      sourceUrls: [
+        { label: 'UUM Official Website', url: 'https://www.uum.edu.my/' },
+        { label: 'UUM Admissions', url: 'https://admission.uum.edu.my/' }
+      ]
+    }
+  },
+  {
+    id: 'ums',
+    name: 'Universiti Malaysia Sabah',
+    shortName: 'UMS',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UMS uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Faculty and programme handbooks remain the final authority for progression or graduation checks.',
+      sourceUrls: [
+        { label: 'UMS Official Website', url: 'https://www.ums.edu.my/v6/' },
+        { label: 'UMS Academic Admission Information', url: 'https://www.ums.edu.my/v6/index.php/academic/admission-ums' }
+      ]
+    }
+  },
+  {
+    id: 'unimas',
+    name: 'Universiti Malaysia Sarawak',
+    shortName: 'UNIMAS',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UNIMAS uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'UNIMAS programme handbooks can define additional rules. Verify the latest handbook before official use.',
+      sourceUrls: [
+        { label: 'UNIMAS Gazette', url: 'https://gazette.unimas.my/' },
+        { label: 'UNIMAS Directory', url: 'https://directory.unimas.my/' }
+      ]
+    }
+  },
+  {
+    id: 'upsi',
+    name: 'Universiti Pendidikan Sultan Idris',
+    shortName: 'UPSI',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UPSI uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Faculty and programme regulations may vary. Use your latest UPSI handbook for official decisions.',
+      sourceUrls: [
+        { label: 'UPSI Official Website', url: 'https://www.upsi.edu.my/' },
+        { label: 'UPSI Admission', url: 'https://www.upsi.edu.my/admission/' }
+      ]
+    }
+  },
+  {
+    id: 'umt',
+    name: 'Universiti Malaysia Terengganu',
+    shortName: 'UMT',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UMT uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'For official progression and graduation checks, refer to UMT academic regulations for your programme.',
+      sourceUrls: [
+        { label: 'UMT Official Website', url: 'https://www.umt.edu.my/' },
+        { label: 'UMT Study Information', url: 'https://www.umt.edu.my/study/' }
+      ]
+    }
+  },
+  {
+    id: 'uthm',
+    name: 'Universiti Tun Hussein Onn Malaysia',
+    shortName: 'UTHM',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UTHM uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Programme-specific rules may differ. Use the latest UTHM handbook before relying on results for official decisions.',
+      sourceUrls: [
+        { label: 'UTHM Official Website', url: 'https://www.uthm.edu.my/en/' },
+        { label: 'UTHM Admission', url: 'https://admission.uthm.edu.my/' }
+      ]
+    }
+  },
+  {
+    id: 'usim',
+    name: 'Universiti Sains Islam Malaysia',
+    shortName: 'USIM',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'USIM uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Faculty-level regulations remain the final authority. Verify with the latest USIM programme handbook.',
+      sourceUrls: [
+        { label: 'USIM Official Website', url: 'https://www.usim.edu.my/' },
+        { label: 'USIM Admission', url: 'https://www.usim.edu.my/admission/' }
+      ]
+    }
+  },
+  {
+    id: 'umpsa',
+    name: 'Universiti Malaysia Pahang Al-Sultan Abdullah',
+    shortName: 'UMPSA',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UMPSA uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Programme regulations can vary by faculty. Verify your latest UMPSA handbook for official use.',
+      sourceUrls: [
+        { label: 'UMPSA Official Website', url: 'https://www.umpsa.edu.my/en' },
+        { label: 'UMPSA Admission', url: 'https://admission.umpsa.edu.my/' }
+      ]
+    }
+  },
+  {
+    id: 'unimap',
+    name: 'Universiti Malaysia Perlis',
+    shortName: 'UniMAP',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UniMAP uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Faculty rules may include additional conditions. Use your latest UniMAP handbook for official decisions.',
+      sourceUrls: [
+        { label: 'UniMAP Official Website', url: 'https://www.unimap.edu.my/index.php/en/' },
+        { label: 'UniMAP Admission', url: 'https://admission.unimap.edu.my/' }
+      ]
+    }
+  },
+  {
+    id: 'utem',
+    name: 'Universiti Teknikal Malaysia Melaka',
+    shortName: 'UTeM',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UTeM uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Programme-specific regulations can vary. Verify with the latest UTeM academic handbook for official use.',
+      sourceUrls: [
+        { label: 'UTeM Official Website', url: 'https://www.utem.edu.my/en/' },
+        { label: 'UTeM Undergraduate Information', url: 'https://www.utem.edu.my/en/undergraduate.html' }
+      ]
+    }
+  },
+  {
+    id: 'unisza',
+    name: 'Universiti Sultan Zainal Abidin',
+    shortName: 'UniSZA',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UniSZA uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'Faculty and programme handbooks remain the final authority for official progression and graduation checks.',
+      sourceUrls: [
+        { label: 'UniSZA Official Website', url: 'https://www.unisza.edu.my/' },
+        { label: 'UniSZA Admission', url: 'https://www.unisza.edu.my/admission/' }
+      ]
+    }
+  },
+  {
+    id: 'umk',
+    name: 'Universiti Malaysia Kelantan',
+    shortName: 'UMK',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UMK uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'For official use, verify programme-level rules in the latest UMK academic regulations handbook.',
+      sourceUrls: [
+        { label: 'UMK Official Website', url: 'https://www.umk.edu.my/en/' },
+        { label: 'UMK Academic Regulations', url: 'https://www.umk.edu.my/en/academics/academic-regulations-book.html' }
+      ]
+    }
+  },
+  {
+    id: 'upnm',
+    name: 'Universiti Pertahanan Nasional Malaysia',
+    shortName: 'UPNM',
+    country: 'Malaysia',
+    region: 'asia',
+    type: 'university',
+    gradeScale: utmGrades,
+    maxGPA: 4.0,
+    seoContent: {
+      gradingNote: 'UPNM uses a 4.0 CGPA framework for degree planning. This page applies a Malaysian university 4.0 planning scale.',
+      accuracyNote: 'For official decisions, always refer to the latest UPNM academic handbook and programme regulations.',
+      sourceUrls: [
+        { label: 'MOHE Media Statement on UPNM Leadership', url: 'https://www.mohe.gov.my/en/broadcast/media-statements/siaran-media-leftenan-jeneral-datuk-arman-rumaizi-hj-ahmad-dilantik-naib-canselor-upnm-ke-8' },
+        { label: 'Malaysia Ministry of Higher Education', url: 'https://www.mohe.gov.my/en' }
       ]
     }
   },
